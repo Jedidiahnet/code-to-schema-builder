@@ -51,7 +51,7 @@ export async function paystackVerifyTransaction(reference: string): Promise<{
   paid_at: string | null;
 }> {
   const res = await fetch(`${PAYSTACK_BASE}/transaction/verify/${encodeURIComponent(reference)}`, {
-    headers: { Authorization: `Bearer ${getSecret()}` },
+    headers: { Authorization: `Bearer ${await getSecret()}` },
   });
   const json = (await res.json()) as { status: boolean; message: string; data?: any };
   if (!res.ok || !json.status || !json.data) {
