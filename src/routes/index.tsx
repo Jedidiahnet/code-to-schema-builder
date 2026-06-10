@@ -1,29 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroLanding } from "@/components/HeroLanding";
 
 export const Route = createFileRoute("/")({
+  component: Index,
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Genius AI — Multi-Agent Trading Analysis" },
+      { name: "description", content: "5 specialized AI agents analyze Pocket Option markets and vote on high-probability BUY/SELL signals with 75–99% confidence." },
     ],
   }),
-  component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  return <HeroLanding />;
 }
