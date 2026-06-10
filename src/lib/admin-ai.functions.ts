@@ -97,6 +97,64 @@ async function tool_metrics() {
   };
 }
 
+async function tool_list_secrets() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("admin_secrets")
+    .select("key,description,value,updated_at")
+    .order("key");
+  return {
+    secrets: (data ?? []).map((s) => ({
+      key: s.key,
+      description: s.description,
+      configured: !!s.value,
+      updated_at: s.updated_at,
+    })),
+  };
+}
+
+async function tool_set_secret(args: { key: string; value: string; description?: string }, actorId: string) {
+  const keyOk = /^[A-Z][A-Z0-9_]*$/.test(args.key);
+  if (!keyOk) throw new Error("Secret key must be UPPER_SNAKE_CASE");
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { invalidateSecretCache } = await import("./secret-store.server");
+  const { error } = await supabaseAdmin.from("admin_secrets").upsert(
+    {
+      key: args.key,
+      value: args.value,
+      description: args.description ?? null,
+      updated_by: actorId,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "key" },
+  );
+  if (error) throw new Error(error.message);
+  invalidateSecretCache(args.key);
+  return { ok: true, key: args.key, configured: args.value.length > 0 };
+}
+
+async function tool_recent_audit(args: { limit?: number }) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("audit_logs")
+    .select("actor_email,action,target_type,target_id,details,created_at")
+    .order("created_at", { ascending: false })
+    .limit(Math.min(Math.max(args.limit ?? 20, 1), 100));
+  return { logs: data ?? [] };
+}
+
+async function tool_db_query(args: { sql: string; params?: unknown[] }) {
+  // Read-only safety: only allow single SELECT statements.
+  const sql = args.sql.trim();
+  if (!/^select\b/i.test(sql) || /;.*\S/.test(sql.replace(/;\s*$/, ""))) {
+    throw new Error("Only single SELECT statements are allowed.");
+  }
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  // Use Postgres SQL via PostgREST RPC isn't available; fall back to constrained selects.
+  // We expose this as a stub for transparency — admins should use specific tools.
+  return { error: "Direct SQL is disabled. Use lookup_user, metrics, or other tools.", attempted_sql: sql };
+}
+
 const TOOLS = [
   { type: "function", function: { name: "lookup_user", description: "Find a user by email, public code (TG-XXXXXX), or name fragment.", parameters: { type: "object", properties: { query: { type: "string" } }, required: ["query"] } } },
   { type: "function", function: { name: "suspend_user", description: "Suspend or unsuspend a user.", parameters: { type: "object", properties: { user_id: { type: "string" }, suspended: { type: "boolean" } }, required: ["user_id", "suspended"] } } },
@@ -105,9 +163,12 @@ const TOOLS = [
   { type: "function", function: { name: "list_tickets", description: "List recent support tickets, optionally filtered by status.", parameters: { type: "object", properties: { status: { type: "string", enum: ["new", "open", "closed"] } } } } },
   { type: "function", function: { name: "update_ticket", description: "Change a support ticket status.", parameters: { type: "object", properties: { ticket_id: { type: "string" }, status: { type: "string", enum: ["new", "open", "closed"] } }, required: ["ticket_id", "status"] } } },
   { type: "function", function: { name: "metrics", description: "Get high-level platform metrics.", parameters: { type: "object", properties: {} } } },
+  { type: "function", function: { name: "list_secrets", description: "List all API keys/secrets stored in admin_secrets (values are never exposed; you'll only see whether each is configured).", parameters: { type: "object", properties: {} } } },
+  { type: "function", function: { name: "set_secret", description: "Add or update an API key in admin_secrets. Use UPPER_SNAKE_CASE for the key. The value is written verbatim and used by server functions (Paystack, Tiingo, Telegram, Stripe, etc.).", parameters: { type: "object", properties: { key: { type: "string" }, value: { type: "string" }, description: { type: "string" } }, required: ["key", "value"] } } },
+  { type: "function", function: { name: "recent_audit", description: "Show recent admin actions from the audit log.", parameters: { type: "object", properties: { limit: { type: "number" } } } } },
 ];
 
-async function runTool(name: string, args: Record<string, unknown>): Promise<unknown> {
+async function runTool(name: string, args: Record<string, unknown>, actorId: string): Promise<unknown> {
   switch (name) {
     case "lookup_user": return tool_lookup_user(args as { query: string });
     case "suspend_user": return tool_suspend_user(args as { user_id: string; suspended: boolean });
@@ -116,6 +177,10 @@ async function runTool(name: string, args: Record<string, unknown>): Promise<unk
     case "list_tickets": return tool_list_tickets(args as { status?: "new" | "open" | "closed" });
     case "update_ticket": return tool_update_ticket(args as { ticket_id: string; status: "new" | "open" | "closed" });
     case "metrics": return tool_metrics();
+    case "list_secrets": return tool_list_secrets();
+    case "set_secret": return tool_set_secret(args as { key: string; value: string; description?: string }, actorId);
+    case "recent_audit": return tool_recent_audit(args as { limit?: number });
+    case "db_query": return tool_db_query(args as { sql: string; params?: unknown[] });
     default: throw new Error(`Unknown tool: ${name}`);
   }
 }
