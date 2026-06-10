@@ -42,8 +42,9 @@ export const fetchTiingoNews = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => NewsInput.parse(d))
   .handler(async ({ data }): Promise<{ articles: NewsArticle[]; error: string | null }> => {
-    const apiKey = process.env.TIINGO_API_KEY;
-    if (!apiKey) return { articles: [], error: "TIINGO_API_KEY not configured" };
+    const { getSecret } = await import("./secret-store.server");
+    const apiKey = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
+    if (!apiKey) return { articles: [], error: "TIINGO_API_KEY not configured. Set it in Admin → Secrets." };
     const params = new URLSearchParams({
       limit: String(data.limit ?? 12),
       sortBy: "publishedDate",
