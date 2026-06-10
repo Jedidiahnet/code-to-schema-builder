@@ -23,10 +23,33 @@ import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
+import { Route as AuthenticatedDashboardSignalsRouteImport } from './routes/_authenticated/dashboard.signals'
+import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
+import { Route as AuthenticatedDashboardSandboxRouteImport } from './routes/_authenticated/dashboard.sandbox'
+import { Route as AuthenticatedDashboardMetricsRouteImport } from './routes/_authenticated/dashboard.metrics'
+import { Route as AuthenticatedDashboardMacroRouteImport } from './routes/_authenticated/dashboard.macro'
+import { Route as AuthenticatedDashboardAutomationRouteImport } from './routes/_authenticated/dashboard.automation'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSecretsRouteImport } from './routes/_authenticated/admin.secrets'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
+import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack.webhook'
+import { Route as AuthenticatedAdminUsersRiskRouteImport } from './routes/_authenticated/admin.users.risk'
+import { Route as AuthenticatedAdminUsersComplianceRouteImport } from './routes/_authenticated/admin.users.compliance'
+import { Route as AuthenticatedAdminUsersAllRouteImport } from './routes/_authenticated/admin.users.all'
+import { Route as AuthenticatedAdminSupportTicketsRouteImport } from './routes/_authenticated/admin.support.tickets'
+import { Route as AuthenticatedAdminSupportBroadcastRouteImport } from './routes/_authenticated/admin.support.broadcast'
+import { Route as AuthenticatedAdminSettingsTeamRouteImport } from './routes/_authenticated/admin.settings.team'
+import { Route as AuthenticatedAdminSettingsAuditRouteImport } from './routes/_authenticated/admin.settings.audit'
+import { Route as AuthenticatedAdminBillingTransactionsRouteImport } from './routes/_authenticated/admin.billing.transactions'
+import { Route as AuthenticatedAdminBillingSubscriptionsRouteImport } from './routes/_authenticated/admin.billing.subscriptions'
+import { Route as AuthenticatedAdminBillingAnalyticsRouteImport } from './routes/_authenticated/admin.billing.analytics'
+import { Route as AuthenticatedAdminBillingAffiliatesRouteImport } from './routes/_authenticated/admin.billing.affiliates'
+import { Route as AuthenticatedAdminAiSignalsRouteImport } from './routes/_authenticated/admin.ai.signals'
+import { Route as AuthenticatedAdminAiPlaygroundRouteImport } from './routes/_authenticated/admin.ai.playground'
+import { Route as AuthenticatedAdminAiFeedsRouteImport } from './routes/_authenticated/admin.ai.feeds'
+import { Route as AuthenticatedAdminAiCouncilRouteImport } from './routes/_authenticated/admin.ai.council'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -97,6 +120,48 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardSupportRoute =
+  AuthenticatedDashboardSupportRouteImport.update({
+    id: '/support',
+    path: '/support',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSignalsRoute =
+  AuthenticatedDashboardSignalsRouteImport.update({
+    id: '/signals',
+    path: '/signals',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSettingsRoute =
+  AuthenticatedDashboardSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSandboxRoute =
+  AuthenticatedDashboardSandboxRouteImport.update({
+    id: '/sandbox',
+    path: '/sandbox',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardMetricsRoute =
+  AuthenticatedDashboardMetricsRouteImport.update({
+    id: '/metrics',
+    path: '/metrics',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardMacroRoute =
+  AuthenticatedDashboardMacroRouteImport.update({
+    id: '/macro',
+    path: '/macro',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAutomationRoute =
+  AuthenticatedDashboardAutomationRouteImport.update({
+    id: '/automation',
+    path: '/automation',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/admin/settings',
@@ -115,11 +180,107 @@ const AuthenticatedAdminMessagesRoute =
     path: '/admin/messages',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminDashboardRoute =
+  AuthenticatedAdminDashboardRouteImport.update({
+    id: '/admin/dashboard',
+    path: '/admin/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiPublicPaystackWebhookRoute =
   ApiPublicPaystackWebhookRouteImport.update({
     id: '/api/public/paystack/webhook',
     path: '/api/public/paystack/webhook',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedAdminUsersRiskRoute =
+  AuthenticatedAdminUsersRiskRouteImport.update({
+    id: '/admin/users/risk',
+    path: '/admin/users/risk',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminUsersComplianceRoute =
+  AuthenticatedAdminUsersComplianceRouteImport.update({
+    id: '/admin/users/compliance',
+    path: '/admin/users/compliance',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminUsersAllRoute =
+  AuthenticatedAdminUsersAllRouteImport.update({
+    id: '/admin/users/all',
+    path: '/admin/users/all',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSupportTicketsRoute =
+  AuthenticatedAdminSupportTicketsRouteImport.update({
+    id: '/admin/support/tickets',
+    path: '/admin/support/tickets',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSupportBroadcastRoute =
+  AuthenticatedAdminSupportBroadcastRouteImport.update({
+    id: '/admin/support/broadcast',
+    path: '/admin/support/broadcast',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSettingsTeamRoute =
+  AuthenticatedAdminSettingsTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => AuthenticatedAdminSettingsRoute,
+  } as any)
+const AuthenticatedAdminSettingsAuditRoute =
+  AuthenticatedAdminSettingsAuditRouteImport.update({
+    id: '/audit',
+    path: '/audit',
+    getParentRoute: () => AuthenticatedAdminSettingsRoute,
+  } as any)
+const AuthenticatedAdminBillingTransactionsRoute =
+  AuthenticatedAdminBillingTransactionsRouteImport.update({
+    id: '/admin/billing/transactions',
+    path: '/admin/billing/transactions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminBillingSubscriptionsRoute =
+  AuthenticatedAdminBillingSubscriptionsRouteImport.update({
+    id: '/admin/billing/subscriptions',
+    path: '/admin/billing/subscriptions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminBillingAnalyticsRoute =
+  AuthenticatedAdminBillingAnalyticsRouteImport.update({
+    id: '/admin/billing/analytics',
+    path: '/admin/billing/analytics',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminBillingAffiliatesRoute =
+  AuthenticatedAdminBillingAffiliatesRouteImport.update({
+    id: '/admin/billing/affiliates',
+    path: '/admin/billing/affiliates',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAiSignalsRoute =
+  AuthenticatedAdminAiSignalsRouteImport.update({
+    id: '/admin/ai/signals',
+    path: '/admin/ai/signals',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAiPlaygroundRoute =
+  AuthenticatedAdminAiPlaygroundRouteImport.update({
+    id: '/admin/ai/playground',
+    path: '/admin/ai/playground',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAiFeedsRoute =
+  AuthenticatedAdminAiFeedsRouteImport.update({
+    id: '/admin/ai/feeds',
+    path: '/admin/ai/feeds',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAiCouncilRoute =
+  AuthenticatedAdminAiCouncilRouteImport.update({
+    id: '/admin/ai/council',
+    path: '/admin/ai/council',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -132,13 +293,36 @@ export interface FileRoutesByFullPath {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/messages': typeof AuthenticatedMessagesRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
-  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
+  '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
+  '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
+  '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
+  '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
+  '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
+  '/admin/billing/transactions': typeof AuthenticatedAdminBillingTransactionsRoute
+  '/admin/settings/audit': typeof AuthenticatedAdminSettingsAuditRoute
+  '/admin/settings/team': typeof AuthenticatedAdminSettingsTeamRoute
+  '/admin/support/broadcast': typeof AuthenticatedAdminSupportBroadcastRoute
+  '/admin/support/tickets': typeof AuthenticatedAdminSupportTicketsRoute
+  '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
+  '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
+  '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -151,13 +335,36 @@ export interface FileRoutesByTo {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/messages': typeof AuthenticatedMessagesRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
-  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
+  '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
+  '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
+  '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
+  '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
+  '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
+  '/admin/billing/transactions': typeof AuthenticatedAdminBillingTransactionsRoute
+  '/admin/settings/audit': typeof AuthenticatedAdminSettingsAuditRoute
+  '/admin/settings/team': typeof AuthenticatedAdminSettingsTeamRoute
+  '/admin/support/broadcast': typeof AuthenticatedAdminSupportBroadcastRoute
+  '/admin/support/tickets': typeof AuthenticatedAdminSupportTicketsRoute
+  '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
+  '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
+  '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesById {
@@ -172,13 +379,36 @@ export interface FileRoutesById {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/secrets': typeof AuthenticatedAdminSecretsRoute
-  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/_authenticated/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/_authenticated/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/_authenticated/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/_authenticated/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/_authenticated/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
+  '/_authenticated/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
+  '/_authenticated/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
+  '/_authenticated/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/_authenticated/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
+  '/_authenticated/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
+  '/_authenticated/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
+  '/_authenticated/admin/billing/transactions': typeof AuthenticatedAdminBillingTransactionsRoute
+  '/_authenticated/admin/settings/audit': typeof AuthenticatedAdminSettingsAuditRoute
+  '/_authenticated/admin/settings/team': typeof AuthenticatedAdminSettingsTeamRoute
+  '/_authenticated/admin/support/broadcast': typeof AuthenticatedAdminSupportBroadcastRoute
+  '/_authenticated/admin/support/tickets': typeof AuthenticatedAdminSupportTicketsRoute
+  '/_authenticated/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
+  '/_authenticated/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
+  '/_authenticated/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRouteTypes {
@@ -196,10 +426,33 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/messages'
     | '/profile'
+    | '/admin/dashboard'
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/automation'
+    | '/dashboard/macro'
+    | '/dashboard/metrics'
+    | '/dashboard/sandbox'
+    | '/dashboard/settings'
+    | '/dashboard/signals'
+    | '/dashboard/support'
     | '/admin/'
+    | '/admin/ai/council'
+    | '/admin/ai/feeds'
+    | '/admin/ai/playground'
+    | '/admin/ai/signals'
+    | '/admin/billing/affiliates'
+    | '/admin/billing/analytics'
+    | '/admin/billing/subscriptions'
+    | '/admin/billing/transactions'
+    | '/admin/settings/audit'
+    | '/admin/settings/team'
+    | '/admin/support/broadcast'
+    | '/admin/support/tickets'
+    | '/admin/users/all'
+    | '/admin/users/compliance'
+    | '/admin/users/risk'
     | '/api/public/paystack/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -215,10 +468,33 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/messages'
     | '/profile'
+    | '/admin/dashboard'
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/automation'
+    | '/dashboard/macro'
+    | '/dashboard/metrics'
+    | '/dashboard/sandbox'
+    | '/dashboard/settings'
+    | '/dashboard/signals'
+    | '/dashboard/support'
     | '/admin'
+    | '/admin/ai/council'
+    | '/admin/ai/feeds'
+    | '/admin/ai/playground'
+    | '/admin/ai/signals'
+    | '/admin/billing/affiliates'
+    | '/admin/billing/analytics'
+    | '/admin/billing/subscriptions'
+    | '/admin/billing/transactions'
+    | '/admin/settings/audit'
+    | '/admin/settings/team'
+    | '/admin/support/broadcast'
+    | '/admin/support/tickets'
+    | '/admin/users/all'
+    | '/admin/users/compliance'
+    | '/admin/users/risk'
     | '/api/public/paystack/webhook'
   id:
     | '__root__'
@@ -235,10 +511,33 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/messages'
     | '/_authenticated/profile'
+    | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/secrets'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/dashboard/automation'
+    | '/_authenticated/dashboard/macro'
+    | '/_authenticated/dashboard/metrics'
+    | '/_authenticated/dashboard/sandbox'
+    | '/_authenticated/dashboard/settings'
+    | '/_authenticated/dashboard/signals'
+    | '/_authenticated/dashboard/support'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/ai/council'
+    | '/_authenticated/admin/ai/feeds'
+    | '/_authenticated/admin/ai/playground'
+    | '/_authenticated/admin/ai/signals'
+    | '/_authenticated/admin/billing/affiliates'
+    | '/_authenticated/admin/billing/analytics'
+    | '/_authenticated/admin/billing/subscriptions'
+    | '/_authenticated/admin/billing/transactions'
+    | '/_authenticated/admin/settings/audit'
+    | '/_authenticated/admin/settings/team'
+    | '/_authenticated/admin/support/broadcast'
+    | '/_authenticated/admin/support/tickets'
+    | '/_authenticated/admin/users/all'
+    | '/_authenticated/admin/users/compliance'
+    | '/_authenticated/admin/users/risk'
     | '/api/public/paystack/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -355,6 +654,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/dashboard/support': {
+      id: '/_authenticated/dashboard/support'
+      path: '/support'
+      fullPath: '/dashboard/support'
+      preLoaderRoute: typeof AuthenticatedDashboardSupportRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/signals': {
+      id: '/_authenticated/dashboard/signals'
+      path: '/signals'
+      fullPath: '/dashboard/signals'
+      preLoaderRoute: typeof AuthenticatedDashboardSignalsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/settings': {
+      id: '/_authenticated/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/sandbox': {
+      id: '/_authenticated/dashboard/sandbox'
+      path: '/sandbox'
+      fullPath: '/dashboard/sandbox'
+      preLoaderRoute: typeof AuthenticatedDashboardSandboxRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/metrics': {
+      id: '/_authenticated/dashboard/metrics'
+      path: '/metrics'
+      fullPath: '/dashboard/metrics'
+      preLoaderRoute: typeof AuthenticatedDashboardMetricsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/macro': {
+      id: '/_authenticated/dashboard/macro'
+      path: '/macro'
+      fullPath: '/dashboard/macro'
+      preLoaderRoute: typeof AuthenticatedDashboardMacroRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/automation': {
+      id: '/_authenticated/dashboard/automation'
+      path: '/automation'
+      fullPath: '/dashboard/automation'
+      preLoaderRoute: typeof AuthenticatedDashboardAutomationRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
       path: '/admin/settings'
@@ -376,6 +724,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMessagesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/dashboard': {
+      id: '/_authenticated/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/public/paystack/webhook': {
       id: '/api/public/paystack/webhook'
       path: '/api/public/paystack/webhook'
@@ -383,29 +738,211 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/users/risk': {
+      id: '/_authenticated/admin/users/risk'
+      path: '/admin/users/risk'
+      fullPath: '/admin/users/risk'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRiskRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/users/compliance': {
+      id: '/_authenticated/admin/users/compliance'
+      path: '/admin/users/compliance'
+      fullPath: '/admin/users/compliance'
+      preLoaderRoute: typeof AuthenticatedAdminUsersComplianceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/users/all': {
+      id: '/_authenticated/admin/users/all'
+      path: '/admin/users/all'
+      fullPath: '/admin/users/all'
+      preLoaderRoute: typeof AuthenticatedAdminUsersAllRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/support/tickets': {
+      id: '/_authenticated/admin/support/tickets'
+      path: '/admin/support/tickets'
+      fullPath: '/admin/support/tickets'
+      preLoaderRoute: typeof AuthenticatedAdminSupportTicketsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/support/broadcast': {
+      id: '/_authenticated/admin/support/broadcast'
+      path: '/admin/support/broadcast'
+      fullPath: '/admin/support/broadcast'
+      preLoaderRoute: typeof AuthenticatedAdminSupportBroadcastRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/settings/team': {
+      id: '/_authenticated/admin/settings/team'
+      path: '/team'
+      fullPath: '/admin/settings/team'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsTeamRouteImport
+      parentRoute: typeof AuthenticatedAdminSettingsRoute
+    }
+    '/_authenticated/admin/settings/audit': {
+      id: '/_authenticated/admin/settings/audit'
+      path: '/audit'
+      fullPath: '/admin/settings/audit'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsAuditRouteImport
+      parentRoute: typeof AuthenticatedAdminSettingsRoute
+    }
+    '/_authenticated/admin/billing/transactions': {
+      id: '/_authenticated/admin/billing/transactions'
+      path: '/admin/billing/transactions'
+      fullPath: '/admin/billing/transactions'
+      preLoaderRoute: typeof AuthenticatedAdminBillingTransactionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/billing/subscriptions': {
+      id: '/_authenticated/admin/billing/subscriptions'
+      path: '/admin/billing/subscriptions'
+      fullPath: '/admin/billing/subscriptions'
+      preLoaderRoute: typeof AuthenticatedAdminBillingSubscriptionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/billing/analytics': {
+      id: '/_authenticated/admin/billing/analytics'
+      path: '/admin/billing/analytics'
+      fullPath: '/admin/billing/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminBillingAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/billing/affiliates': {
+      id: '/_authenticated/admin/billing/affiliates'
+      path: '/admin/billing/affiliates'
+      fullPath: '/admin/billing/affiliates'
+      preLoaderRoute: typeof AuthenticatedAdminBillingAffiliatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ai/signals': {
+      id: '/_authenticated/admin/ai/signals'
+      path: '/admin/ai/signals'
+      fullPath: '/admin/ai/signals'
+      preLoaderRoute: typeof AuthenticatedAdminAiSignalsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ai/playground': {
+      id: '/_authenticated/admin/ai/playground'
+      path: '/admin/ai/playground'
+      fullPath: '/admin/ai/playground'
+      preLoaderRoute: typeof AuthenticatedAdminAiPlaygroundRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ai/feeds': {
+      id: '/_authenticated/admin/ai/feeds'
+      path: '/admin/ai/feeds'
+      fullPath: '/admin/ai/feeds'
+      preLoaderRoute: typeof AuthenticatedAdminAiFeedsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ai/council': {
+      id: '/_authenticated/admin/ai/council'
+      path: '/admin/ai/council'
+      fullPath: '/admin/ai/council'
+      preLoaderRoute: typeof AuthenticatedAdminAiCouncilRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardAutomationRoute: typeof AuthenticatedDashboardAutomationRoute
+  AuthenticatedDashboardMacroRoute: typeof AuthenticatedDashboardMacroRoute
+  AuthenticatedDashboardMetricsRoute: typeof AuthenticatedDashboardMetricsRoute
+  AuthenticatedDashboardSandboxRoute: typeof AuthenticatedDashboardSandboxRoute
+  AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
+  AuthenticatedDashboardSignalsRoute: typeof AuthenticatedDashboardSignalsRoute
+  AuthenticatedDashboardSupportRoute: typeof AuthenticatedDashboardSupportRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardAutomationRoute:
+      AuthenticatedDashboardAutomationRoute,
+    AuthenticatedDashboardMacroRoute: AuthenticatedDashboardMacroRoute,
+    AuthenticatedDashboardMetricsRoute: AuthenticatedDashboardMetricsRoute,
+    AuthenticatedDashboardSandboxRoute: AuthenticatedDashboardSandboxRoute,
+    AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
+    AuthenticatedDashboardSignalsRoute: AuthenticatedDashboardSignalsRoute,
+    AuthenticatedDashboardSupportRoute: AuthenticatedDashboardSupportRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
+interface AuthenticatedAdminSettingsRouteChildren {
+  AuthenticatedAdminSettingsAuditRoute: typeof AuthenticatedAdminSettingsAuditRoute
+  AuthenticatedAdminSettingsTeamRoute: typeof AuthenticatedAdminSettingsTeamRoute
+}
+
+const AuthenticatedAdminSettingsRouteChildren: AuthenticatedAdminSettingsRouteChildren =
+  {
+    AuthenticatedAdminSettingsAuditRoute: AuthenticatedAdminSettingsAuditRoute,
+    AuthenticatedAdminSettingsTeamRoute: AuthenticatedAdminSettingsTeamRoute,
+  }
+
+const AuthenticatedAdminSettingsRouteWithChildren =
+  AuthenticatedAdminSettingsRoute._addFileChildren(
+    AuthenticatedAdminSettingsRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminSecretsRoute: typeof AuthenticatedAdminSecretsRoute
-  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRouteWithChildren
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminAiCouncilRoute: typeof AuthenticatedAdminAiCouncilRoute
+  AuthenticatedAdminAiFeedsRoute: typeof AuthenticatedAdminAiFeedsRoute
+  AuthenticatedAdminAiPlaygroundRoute: typeof AuthenticatedAdminAiPlaygroundRoute
+  AuthenticatedAdminAiSignalsRoute: typeof AuthenticatedAdminAiSignalsRoute
+  AuthenticatedAdminBillingAffiliatesRoute: typeof AuthenticatedAdminBillingAffiliatesRoute
+  AuthenticatedAdminBillingAnalyticsRoute: typeof AuthenticatedAdminBillingAnalyticsRoute
+  AuthenticatedAdminBillingSubscriptionsRoute: typeof AuthenticatedAdminBillingSubscriptionsRoute
+  AuthenticatedAdminBillingTransactionsRoute: typeof AuthenticatedAdminBillingTransactionsRoute
+  AuthenticatedAdminSupportBroadcastRoute: typeof AuthenticatedAdminSupportBroadcastRoute
+  AuthenticatedAdminSupportTicketsRoute: typeof AuthenticatedAdminSupportTicketsRoute
+  AuthenticatedAdminUsersAllRoute: typeof AuthenticatedAdminUsersAllRoute
+  AuthenticatedAdminUsersComplianceRoute: typeof AuthenticatedAdminUsersComplianceRoute
+  AuthenticatedAdminUsersRiskRoute: typeof AuthenticatedAdminUsersRiskRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
   AuthenticatedAdminSecretsRoute: AuthenticatedAdminSecretsRoute,
-  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRouteWithChildren,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminAiCouncilRoute: AuthenticatedAdminAiCouncilRoute,
+  AuthenticatedAdminAiFeedsRoute: AuthenticatedAdminAiFeedsRoute,
+  AuthenticatedAdminAiPlaygroundRoute: AuthenticatedAdminAiPlaygroundRoute,
+  AuthenticatedAdminAiSignalsRoute: AuthenticatedAdminAiSignalsRoute,
+  AuthenticatedAdminBillingAffiliatesRoute:
+    AuthenticatedAdminBillingAffiliatesRoute,
+  AuthenticatedAdminBillingAnalyticsRoute:
+    AuthenticatedAdminBillingAnalyticsRoute,
+  AuthenticatedAdminBillingSubscriptionsRoute:
+    AuthenticatedAdminBillingSubscriptionsRoute,
+  AuthenticatedAdminBillingTransactionsRoute:
+    AuthenticatedAdminBillingTransactionsRoute,
+  AuthenticatedAdminSupportBroadcastRoute:
+    AuthenticatedAdminSupportBroadcastRoute,
+  AuthenticatedAdminSupportTicketsRoute: AuthenticatedAdminSupportTicketsRoute,
+  AuthenticatedAdminUsersAllRoute: AuthenticatedAdminUsersAllRoute,
+  AuthenticatedAdminUsersComplianceRoute:
+    AuthenticatedAdminUsersComplianceRoute,
+  AuthenticatedAdminUsersRiskRoute: AuthenticatedAdminUsersRiskRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -427,13 +964,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
