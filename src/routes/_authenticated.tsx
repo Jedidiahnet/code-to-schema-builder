@@ -1,20 +1,19 @@
 import { createFileRoute, Outlet, redirect, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { LogOut, User as UserIcon, CreditCard, ShieldCheck, LayoutDashboard, MessageCircle, MessagesSquare } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { getMyPlan } from "@/lib/subscription.functions";
 import { planLabel } from "@/lib/plans";
+import { AppSidebar } from "@/components/AppSidebar";
+import { adminNav, userNav } from "@/components/nav-config";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) {
-      throw redirect({
-        to: "/login",
-        search: { redirect: location.pathname || "/dashboard" },
-      });
+      throw redirect({ to: "/login", search: { redirect: location.pathname || "/dashboard" } });
     }
   },
   component: AuthLayout,
@@ -28,67 +27,58 @@ function AuthLayout() {
 
   const plan = planQ.data?.plan ?? null;
   const isAdmin = planQ.data?.isAdmin ?? false;
+  const sections = isAdmin ? adminNav : userNav;
+
   const tone =
-    plan === "quantum" ? "border-primary/80 text-primary shadow-[0_0_20px_-8px_hsl(var(--primary))]" :
-    plan === "elite" ? "border-primary/60 text-primary" :
-    plan === "pro" ? "border-bull/40 text-bull" :
-    plan === "basic" ? "border-yellow-500/40 text-yellow-300" :
+    plan === "quantum" ? "border-primary/80 text-primary card-glow" :
+    plan === "elite" ? "border-accent/70 text-accent" :
+    plan === "pro" ? "border-bull/50 text-bull" :
+    plan === "basic" ? "border-warn/50 text-warn" :
     "border-border text-muted-foreground";
 
   return (
-    <div className="min-h-screen gradient-radial">
-      <header className="border-b border-border/40 bg-background/40 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
-          <Link to={isAdmin ? "/admin" : "/dashboard"} className="font-display tracking-widest text-glow text-sm">
-            GENIUS AI {isAdmin && <span className="ml-1 rounded bg-primary/20 px-1.5 py-0.5 text-[10px] text-primary">ADMIN</span>}
+    <div className="flex min-h-screen">
+      <AppSidebar
+        brand={
+          <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex items-center gap-2">
+            <span className="grid h-7 w-7 place-items-center rounded-md bg-primary/20 font-display text-xs text-primary">TS</span>
+            <div>
+              <div className="font-display text-sm text-glow">TRADSIG</div>
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                {isAdmin ? "Admin Console" : "Trader Terminal"}
+              </div>
+            </div>
           </Link>
-          <nav className="hidden items-center gap-1 md:flex">
-            {isAdmin ? (
-              <>
-                <NavLink to="/admin" icon={<ShieldCheck className="h-3.5 w-3.5" />}>Admin</NavLink>
-                <NavLink to="/admin/messages" icon={<MessagesSquare className="h-3.5 w-3.5" />}>Inbox</NavLink>
-                <NavLink to="/admin/settings" icon={<CreditCard className="h-3.5 w-3.5" />}>Settings</NavLink>
-                <NavLink to="/profile" icon={<UserIcon className="h-3.5 w-3.5" />}>Profile</NavLink>
-              </>
-            ) : (
-              <>
-                <NavLink to="/dashboard" icon={<LayoutDashboard className="h-3.5 w-3.5" />}>Dashboard</NavLink>
-                <NavLink to="/billing" icon={<CreditCard className="h-3.5 w-3.5" />}>Billing</NavLink>
-                <NavLink to="/messages" icon={<MessagesSquare className="h-3.5 w-3.5" />}>Messages</NavLink>
-                <NavLink to="/profile" icon={<UserIcon className="h-3.5 w-3.5" />}>Profile</NavLink>
-                <NavLink to="/support" icon={<MessageCircle className="h-3.5 w-3.5" />}>Support</NavLink>
-              </>
-            )}
-          </nav>
-          <div className="flex items-center gap-2">
+        }
+        sections={sections}
+        footer={
+          <div className="flex items-center justify-between text-xs">
+            <span className="truncate text-muted-foreground">{user?.email}</span>
+            <button onClick={async () => { await signOut(); router.navigate({ to: "/" }); }} className="text-muted-foreground hover:text-foreground" title="Sign out">
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        }
+      />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-border/60 bg-background/70 px-4 py-2.5 backdrop-blur lg:px-6">
+          <Link to={isAdmin ? "/admin" : "/dashboard"} className="font-display text-xs text-glow lg:hidden">TRADSIG</Link>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="hidden text-muted-foreground sm:inline">{isAdmin ? "Admin" : "Trader"}</span>
             {!isAdmin && (
               <Link to="/pricing" className={`rounded-md border px-2 py-1 font-mono text-[11px] ${tone}`}>
                 {planLabel(plan).toUpperCase()}
               </Link>
             )}
-            <button
-              onClick={async () => { await signOut(); router.navigate({ to: "/" }); }}
-              className="flex items-center gap-1 rounded-md border border-border bg-card/60 px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <LogOut className="h-3.5 w-3.5" /> Sign out
-            </button>
+            {isAdmin && (
+              <Link to="/dashboard" className="rounded-md border border-border px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">View as user</Link>
+            )}
           </div>
-        </div>
-      </header>
-      <Outlet />
+        </header>
+        <main className="min-w-0 flex-1">
+          <Outlet />
+        </main>
+      </div>
     </div>
-  );
-}
-
-function NavLink({ to, children, icon }: { to: string; children: React.ReactNode; icon: React.ReactNode }) {
-  return (
-    <Link
-      to={to}
-      className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-muted-foreground hover:bg-card/60 hover:text-foreground"
-      activeProps={{ className: "flex items-center gap-1.5 rounded-md bg-card/80 px-3 py-1.5 text-xs text-foreground" }}
-    >
-      {icon}
-      {children}
-    </Link>
   );
 }
