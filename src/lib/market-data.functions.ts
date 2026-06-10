@@ -80,9 +80,10 @@ export const fetchTiingoNews = createServerFn({ method: "POST" })
 export const tiingoHealth = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const apiKey = process.env.TIINGO_API_KEY;
+    const { getSecret } = await import("./secret-store.server");
+    const apiKey = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
     if (!apiKey) {
-      return { configured: false, ok: false, latencyMs: null, message: "TIINGO_API_KEY not configured" };
+      return { configured: false, ok: false, latencyMs: null, message: "TIINGO_API_KEY not configured. Set it in Admin → Secrets." };
     }
     const start = Date.now();
     try {
