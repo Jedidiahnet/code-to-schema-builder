@@ -40,9 +40,10 @@ export async function fetchCandlesCore(input: {
   timeframe: string;
   count?: number;
 }): Promise<FetchCandlesResult> {
-  const apiKey = process.env.TIINGO_API_KEY;
+  const { getSecret } = await import("./secret-store.server");
+  const apiKey = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
   if (!apiKey) {
-    return { candles: [], source: "error", error: "TIINGO_API_KEY not configured" };
+    return { candles: [], source: "error", error: "TIINGO_API_KEY not configured. Set it in Admin → Secrets." };
   }
 
   const ticker = normalizePair(input.pair);

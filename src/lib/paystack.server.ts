@@ -1,4 +1,6 @@
 // Server-only Paystack helpers. Never import from client code.
+import { requireSecret } from "./secret-store.server";
+
 const PAYSTACK_BASE = "https://api.paystack.co";
 
 export type PaystackInitResponse = {
@@ -7,10 +9,8 @@ export type PaystackInitResponse = {
   reference: string;
 };
 
-function getSecret(): string {
-  const key = process.env.PAYSTACK_SECRET_KEY;
-  if (!key) throw new Error("PAYSTACK_SECRET_KEY is not configured");
-  return key;
+async function getSecret(): Promise<string> {
+  return requireSecret("PAYSTACK_SECRET_KEY");
 }
 
 export async function paystackInitTransaction(args: {
@@ -23,7 +23,7 @@ export async function paystackInitTransaction(args: {
   const res = await fetch(`${PAYSTACK_BASE}/transaction/initialize`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${getSecret()}`,
+      Authorization: `Bearer ${await getSecret()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -51,7 +51,7 @@ export async function paystackVerifyTransaction(reference: string): Promise<{
   paid_at: string | null;
 }> {
   const res = await fetch(`${PAYSTACK_BASE}/transaction/verify/${encodeURIComponent(reference)}`, {
-    headers: { Authorization: `Bearer ${getSecret()}` },
+    headers: { Authorization: `Bearer ${await getSecret()}` },
   });
   const json = (await res.json()) as { status: boolean; message: string; data?: any };
   if (!res.ok || !json.status || !json.data) {

@@ -9,10 +9,11 @@ export async function sendTelegramMessage(
   chatId: string,
   text: string,
 ): Promise<SendResult> {
+  const { getSecret } = await import("./secret-store.server");
   const lovableKey = process.env.LOVABLE_API_KEY;
-  const tgKey = process.env.TELEGRAM_API_KEY;
+  const tgKey = (await getSecret("TELEGRAM_BOT_TOKEN")) ?? process.env.TELEGRAM_API_KEY;
   if (!lovableKey) return { ok: false, error: "LOVABLE_API_KEY not configured" };
-  if (!tgKey) return { ok: false, error: "Telegram connector not linked" };
+  if (!tgKey) return { ok: false, error: "TELEGRAM_BOT_TOKEN not configured. Set it in Admin → Secrets." };
   if (!chatId) return { ok: false, error: "Missing chat_id" };
 
   try {

@@ -42,8 +42,9 @@ export const fetchTiingoNews = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => NewsInput.parse(d))
   .handler(async ({ data }): Promise<{ articles: NewsArticle[]; error: string | null }> => {
-    const apiKey = process.env.TIINGO_API_KEY;
-    if (!apiKey) return { articles: [], error: "TIINGO_API_KEY not configured" };
+    const { getSecret } = await import("./secret-store.server");
+    const apiKey = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
+    if (!apiKey) return { articles: [], error: "TIINGO_API_KEY not configured. Set it in Admin → Secrets." };
     const params = new URLSearchParams({
       limit: String(data.limit ?? 12),
       sortBy: "publishedDate",
@@ -79,9 +80,10 @@ export const fetchTiingoNews = createServerFn({ method: "POST" })
 export const tiingoHealth = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const apiKey = process.env.TIINGO_API_KEY;
+    const { getSecret } = await import("./secret-store.server");
+    const apiKey = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
     if (!apiKey) {
-      return { configured: false, ok: false, latencyMs: null, message: "TIINGO_API_KEY not configured" };
+      return { configured: false, ok: false, latencyMs: null, message: "TIINGO_API_KEY not configured. Set it in Admin → Secrets." };
     }
     const start = Date.now();
     try {
@@ -101,6 +103,7 @@ export const tiingoHealth = createServerFn({ method: "GET" })
 export const getTiingoWsToken = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const token = process.env.TIINGO_API_KEY ?? null;
+    const { getSecret } = await import("./secret-store.server");
+    const token = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY ?? null;
     return { token };
   });
