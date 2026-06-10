@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, Card } from "@/components/PageShell";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { adminRecentAudit } from "@/lib/admin-secrets.functions";
+import { listAuditLogs as adminRecentAudit } from "@/lib/admin-secrets.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/settings/audit")({
   component: Audit,
