@@ -23,6 +23,13 @@ import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
+import { Route as AuthenticatedDashboardSignalsRouteImport } from './routes/_authenticated/dashboard.signals'
+import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
+import { Route as AuthenticatedDashboardSandboxRouteImport } from './routes/_authenticated/dashboard.sandbox'
+import { Route as AuthenticatedDashboardMetricsRouteImport } from './routes/_authenticated/dashboard.metrics'
+import { Route as AuthenticatedDashboardMacroRouteImport } from './routes/_authenticated/dashboard.macro'
+import { Route as AuthenticatedDashboardAutomationRouteImport } from './routes/_authenticated/dashboard.automation'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSecretsRouteImport } from './routes/_authenticated/admin.secrets'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
@@ -113,6 +120,48 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardSupportRoute =
+  AuthenticatedDashboardSupportRouteImport.update({
+    id: '/support',
+    path: '/support',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSignalsRoute =
+  AuthenticatedDashboardSignalsRouteImport.update({
+    id: '/signals',
+    path: '/signals',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSettingsRoute =
+  AuthenticatedDashboardSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSandboxRoute =
+  AuthenticatedDashboardSandboxRouteImport.update({
+    id: '/sandbox',
+    path: '/sandbox',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardMetricsRoute =
+  AuthenticatedDashboardMetricsRouteImport.update({
+    id: '/metrics',
+    path: '/metrics',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardMacroRoute =
+  AuthenticatedDashboardMacroRouteImport.update({
+    id: '/macro',
+    path: '/macro',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAutomationRoute =
+  AuthenticatedDashboardAutomationRouteImport.update({
+    id: '/automation',
+    path: '/automation',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/admin/settings',
@@ -244,13 +293,20 @@ export interface FileRoutesByFullPath {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/messages': typeof AuthenticatedMessagesRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
@@ -279,13 +335,20 @@ export interface FileRoutesByTo {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/messages': typeof AuthenticatedMessagesRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
@@ -316,13 +379,20 @@ export interface FileRoutesById {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/_authenticated/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
+  '/_authenticated/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
+  '/_authenticated/dashboard/metrics': typeof AuthenticatedDashboardMetricsRoute
+  '/_authenticated/dashboard/sandbox': typeof AuthenticatedDashboardSandboxRoute
+  '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/_authenticated/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
+  '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/_authenticated/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
@@ -360,6 +430,13 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/automation'
+    | '/dashboard/macro'
+    | '/dashboard/metrics'
+    | '/dashboard/sandbox'
+    | '/dashboard/settings'
+    | '/dashboard/signals'
+    | '/dashboard/support'
     | '/admin/'
     | '/admin/ai/council'
     | '/admin/ai/feeds'
@@ -395,6 +472,13 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/automation'
+    | '/dashboard/macro'
+    | '/dashboard/metrics'
+    | '/dashboard/sandbox'
+    | '/dashboard/settings'
+    | '/dashboard/signals'
+    | '/dashboard/support'
     | '/admin'
     | '/admin/ai/council'
     | '/admin/ai/feeds'
@@ -431,6 +515,13 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/secrets'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/dashboard/automation'
+    | '/_authenticated/dashboard/macro'
+    | '/_authenticated/dashboard/metrics'
+    | '/_authenticated/dashboard/sandbox'
+    | '/_authenticated/dashboard/settings'
+    | '/_authenticated/dashboard/signals'
+    | '/_authenticated/dashboard/support'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/ai/council'
     | '/_authenticated/admin/ai/feeds'
@@ -562,6 +653,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/support': {
+      id: '/_authenticated/dashboard/support'
+      path: '/support'
+      fullPath: '/dashboard/support'
+      preLoaderRoute: typeof AuthenticatedDashboardSupportRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/signals': {
+      id: '/_authenticated/dashboard/signals'
+      path: '/signals'
+      fullPath: '/dashboard/signals'
+      preLoaderRoute: typeof AuthenticatedDashboardSignalsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/settings': {
+      id: '/_authenticated/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/sandbox': {
+      id: '/_authenticated/dashboard/sandbox'
+      path: '/sandbox'
+      fullPath: '/dashboard/sandbox'
+      preLoaderRoute: typeof AuthenticatedDashboardSandboxRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/metrics': {
+      id: '/_authenticated/dashboard/metrics'
+      path: '/metrics'
+      fullPath: '/dashboard/metrics'
+      preLoaderRoute: typeof AuthenticatedDashboardMetricsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/macro': {
+      id: '/_authenticated/dashboard/macro'
+      path: '/macro'
+      fullPath: '/dashboard/macro'
+      preLoaderRoute: typeof AuthenticatedDashboardMacroRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/automation': {
+      id: '/_authenticated/dashboard/automation'
+      path: '/automation'
+      fullPath: '/dashboard/automation'
+      preLoaderRoute: typeof AuthenticatedDashboardAutomationRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
@@ -706,6 +846,33 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardAutomationRoute: typeof AuthenticatedDashboardAutomationRoute
+  AuthenticatedDashboardMacroRoute: typeof AuthenticatedDashboardMacroRoute
+  AuthenticatedDashboardMetricsRoute: typeof AuthenticatedDashboardMetricsRoute
+  AuthenticatedDashboardSandboxRoute: typeof AuthenticatedDashboardSandboxRoute
+  AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
+  AuthenticatedDashboardSignalsRoute: typeof AuthenticatedDashboardSignalsRoute
+  AuthenticatedDashboardSupportRoute: typeof AuthenticatedDashboardSupportRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardAutomationRoute:
+      AuthenticatedDashboardAutomationRoute,
+    AuthenticatedDashboardMacroRoute: AuthenticatedDashboardMacroRoute,
+    AuthenticatedDashboardMetricsRoute: AuthenticatedDashboardMetricsRoute,
+    AuthenticatedDashboardSandboxRoute: AuthenticatedDashboardSandboxRoute,
+    AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
+    AuthenticatedDashboardSignalsRoute: AuthenticatedDashboardSignalsRoute,
+    AuthenticatedDashboardSupportRoute: AuthenticatedDashboardSupportRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
 interface AuthenticatedAdminSettingsRouteChildren {
   AuthenticatedAdminSettingsAuditRoute: typeof AuthenticatedAdminSettingsAuditRoute
   AuthenticatedAdminSettingsTeamRoute: typeof AuthenticatedAdminSettingsTeamRoute
@@ -724,7 +891,7 @@ const AuthenticatedAdminSettingsRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
@@ -749,7 +916,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,

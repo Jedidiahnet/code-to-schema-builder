@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin/settings/audit")({
 function Audit() {
   const fn = useServerFn(adminRecentAudit);
   const q = useQuery({ queryKey: ["audit"], queryFn: () => fn({ data: { limit: 100 } }) });
-  const rows = q.data?.entries ?? [];
+  const rows = q.data?.logs ?? [];
 
   return (
     <>
