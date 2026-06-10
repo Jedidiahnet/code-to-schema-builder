@@ -23,7 +23,7 @@ export async function paystackInitTransaction(args: {
   const res = await fetch(`${PAYSTACK_BASE}/transaction/initialize`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${getSecret()}`,
+      Authorization: `Bearer ${await getSecret()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
