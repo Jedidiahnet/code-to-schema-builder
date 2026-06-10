@@ -72,7 +72,7 @@ export const upsertAdminSecret = createServerFn({ method: "POST" })
 
     await supabaseAdmin.rpc("log_audit", {
       _actor_id: context.userId,
-      _actor_email: context.claims?.email ?? null,
+      _actor_email: (context.claims?.email as string | undefined) ?? "",
       _action: "secret.upsert",
       _target_type: "admin_secret",
       _target_id: data.key,
