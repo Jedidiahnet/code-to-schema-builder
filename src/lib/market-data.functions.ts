@@ -103,6 +103,7 @@ export const tiingoHealth = createServerFn({ method: "GET" })
 export const getTiingoWsToken = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const token = process.env.TIINGO_API_KEY ?? null;
+    const { getSecret } = await import("./secret-store.server");
+    const token = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY ?? null;
     return { token };
   });
