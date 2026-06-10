@@ -1,4 +1,6 @@
 // Server-only Paystack helpers. Never import from client code.
+import { requireSecret } from "./secret-store.server";
+
 const PAYSTACK_BASE = "https://api.paystack.co";
 
 export type PaystackInitResponse = {
@@ -7,10 +9,8 @@ export type PaystackInitResponse = {
   reference: string;
 };
 
-function getSecret(): string {
-  const key = process.env.PAYSTACK_SECRET_KEY;
-  if (!key) throw new Error("PAYSTACK_SECRET_KEY is not configured");
-  return key;
+async function getSecret(): Promise<string> {
+  return requireSecret("PAYSTACK_SECRET_KEY");
 }
 
 export async function paystackInitTransaction(args: {
