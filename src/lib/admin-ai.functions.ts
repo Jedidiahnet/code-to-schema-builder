@@ -251,7 +251,7 @@ Keep responses concise and action-oriented. Use markdown.`;
         try { args = JSON.parse(call.function?.arguments ?? "{}"); } catch { /* noop */ }
         let result: unknown;
         try {
-          result = await runTool(name, args);
+          result = await runTool(name, args, context.userId);
         } catch (e) {
           result = { error: e instanceof Error ? e.message : String(e) };
         }
