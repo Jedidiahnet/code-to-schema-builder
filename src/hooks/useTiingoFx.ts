@@ -22,6 +22,7 @@ export function useTiingoFx(pairs: string[]) {
   const [error, setError] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const retryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const attemptsRef = useRef(0);
   const tokenFn = useServerFn(getTiingoWsToken);
 
   const normalized = pairs.map((p) => p.replace(/[^a-zA-Z]/g, "").toLowerCase()).filter(Boolean);
@@ -30,6 +31,7 @@ export function useTiingoFx(pairs: string[]) {
   useEffect(() => {
     let cancelled = false;
     let token: string | null = null;
+    attemptsRef.current = 0;
 
     const cleanup = () => {
       if (retryRef.current) clearTimeout(retryRef.current);
@@ -42,12 +44,28 @@ export function useTiingoFx(pairs: string[]) {
 
     const connect = () => {
       if (cancelled || !token || normalized.length === 0) return;
+      // Cap reconnection attempts to avoid noisy infinite loops when the upstream is down.
+      if (attemptsRef.current >= 5) {
+        setState("error");
+        setError("Live feed unavailable. Will resume on next page load.");
+        return;
+      }
+      attemptsRef.current += 1;
       setState("connecting");
-      const ws = new WebSocket("wss://api.tiingo.com/fx");
+
+      let ws: WebSocket;
+      try {
+        ws = new WebSocket("wss://api.tiingo.com/fx");
+      } catch (e) {
+        setState("error");
+        setError(e instanceof Error ? e.message : "WebSocket construction failed");
+        return;
+      }
       wsRef.current = ws;
 
       ws.onopen = () => {
         if (cancelled) return;
+        attemptsRef.current = 0;
         setState("open");
         setError(null);
         ws.send(JSON.stringify({
@@ -61,31 +79,29 @@ export function useTiingoFx(pairs: string[]) {
         try {
           const msg = JSON.parse(ev.data);
           if (msg?.messageType !== "A" || !Array.isArray(msg.data)) return;
-          // Tiingo FX payload: ["Q", ticker, dateISO, bidSize, bid, midPrice, askSize, ask]
           const [type, ticker, dateISO, , bid, mid, , ask] = msg.data;
           if (type !== "Q" || typeof ticker !== "string") return;
-          const tick: FxTick = {
-            ticker,
-            bid: Number(bid),
-            ask: Number(ask),
-            mid: Number(mid),
-            timestamp: dateISO ? new Date(dateISO).getTime() : Date.now(),
-          };
-          setTicks((prev) => ({ ...prev, [ticker]: tick }));
-        } catch {
-          /* ignore malformed frame */
-        }
+          setTicks((prev) => ({
+            ...prev,
+            [ticker]: {
+              ticker, bid: Number(bid), ask: Number(ask), mid: Number(mid),
+              timestamp: dateISO ? new Date(dateISO).getTime() : Date.now(),
+            },
+          }));
+        } catch { /* ignore */ }
       };
 
       ws.onerror = () => {
+        // Don't spam console; surface via state.
         setState("error");
-        setError("WebSocket error");
       };
 
       ws.onclose = () => {
         if (cancelled) return;
         setState("closed");
-        retryRef.current = setTimeout(connect, 3000);
+        // Exponential backoff up to ~30s.
+        const delay = Math.min(30000, 3000 * 2 ** Math.max(0, attemptsRef.current - 1));
+        retryRef.current = setTimeout(connect, delay);
       };
     };
 
@@ -93,7 +109,7 @@ export function useTiingoFx(pairs: string[]) {
       try {
         const { token: t } = await tokenFn();
         if (cancelled) return;
-        if (!t) { setState("unconfigured"); setError("TIINGO_API_KEY not configured"); return; }
+        if (!t) { setState("unconfigured"); setError("Live feed not yet configured."); return; }
         token = t;
         connect();
       } catch (e) {
@@ -101,10 +117,7 @@ export function useTiingoFx(pairs: string[]) {
       }
     })();
 
-    return () => {
-      cancelled = true;
-      cleanup();
-    };
+    return () => { cancelled = true; cleanup(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 

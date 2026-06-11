@@ -29,9 +29,21 @@ const tip = {
   labelStyle: { color: "hsl(var(--muted-foreground))" } as React.CSSProperties,
 };
 
+function EmptyState({ height = 220 }: { height?: number }) {
+  return (
+    <div
+      style={{ height }}
+      className="flex w-full items-center justify-center rounded-md border border-dashed border-border/60 bg-background/30 px-3 text-center text-xs text-muted-foreground"
+    >
+      No data yet — connect a live feed to populate this chart.
+    </div>
+  );
+}
+
 export function GlowAreaChart({ data, dataKey = "v", xKey = "t", color = "var(--primary)" }: {
   data: Array<Record<string, unknown>>; dataKey?: string; xKey?: string; color?: string;
 }) {
+  if (!data || data.length === 0) return <EmptyState />;
   return (
     <ResponsiveContainer width="100%" height={220}>
       <AreaChart data={data}>
@@ -54,6 +66,7 @@ export function GlowAreaChart({ data, dataKey = "v", xKey = "t", color = "var(--
 export function StackedBars({ data, keys }: {
   data: Array<Record<string, unknown>>; keys: { key: string; color: string; label: string }[];
 }) {
+  if (!data || data.length === 0) return <EmptyState height={240} />;
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={data}>
@@ -73,6 +86,7 @@ export function StackedBars({ data, keys }: {
 export function MultiLine({ data, keys }: {
   data: Array<Record<string, unknown>>; keys: { key: string; color: string; label: string }[];
 }) {
+  if (!data || data.length === 0) return <EmptyState height={240} />;
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart data={data}>
@@ -90,6 +104,7 @@ export function MultiLine({ data, keys }: {
 }
 
 export function DonutChart({ data }: { data: { name: string; value: number; color: string }[] }) {
+  if (!data || data.length === 0) return <EmptyState />;
   return (
     <ResponsiveContainer width="100%" height={220}>
       <PieChart>

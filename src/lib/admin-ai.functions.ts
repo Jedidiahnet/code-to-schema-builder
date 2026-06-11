@@ -143,16 +143,43 @@ async function tool_recent_audit(args: { limit?: number }) {
   return { logs: data ?? [] };
 }
 
-async function tool_db_query(args: { sql: string; params?: unknown[] }) {
-  // Read-only safety: only allow single SELECT statements.
-  const sql = args.sql.trim();
-  if (!/^select\b/i.test(sql) || /;.*\S/.test(sql.replace(/;\s*$/, ""))) {
-    throw new Error("Only single SELECT statements are allowed.");
+// Health-check an external API (Tiingo, Paystack, Telegram, or a custom URL).
+async function tool_check_api(args: { service?: "tiingo" | "paystack" | "telegram" | "lovable_ai"; url?: string }) {
+  const { getSecret } = await import("./secret-store.server");
+  type Probe = { name: string; url: string; headers?: Record<string, string>; needsKey?: string };
+  const probes: Probe[] = [];
+
+  if (args.url) probes.push({ name: "custom", url: args.url });
+
+  if (!args.service || args.service === "tiingo") {
+    const k = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
+    probes.push({ name: "tiingo", url: "https://api.tiingo.com/api/test?format=json", headers: k ? { Authorization: `Token ${k}` } : undefined, needsKey: k ? undefined : "TIINGO_API_KEY" });
   }
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  // Use Postgres SQL via PostgREST RPC isn't available; fall back to constrained selects.
-  // We expose this as a stub for transparency — admins should use specific tools.
-  return { error: "Direct SQL is disabled. Use lookup_user, metrics, or other tools.", attempted_sql: sql };
+  if (!args.service || args.service === "paystack") {
+    const k = (await getSecret("PAYSTACK_SECRET_KEY")) ?? process.env.PAYSTACK_SECRET_KEY;
+    probes.push({ name: "paystack", url: "https://api.paystack.co/bank?country=ghana&perPage=1", headers: k ? { Authorization: `Bearer ${k}` } : undefined, needsKey: k ? undefined : "PAYSTACK_SECRET_KEY" });
+  }
+  if (!args.service || args.service === "telegram") {
+    const k = (await getSecret("TELEGRAM_BOT_TOKEN")) ?? process.env.TELEGRAM_BOT_TOKEN;
+    probes.push({ name: "telegram", url: k ? `https://api.telegram.org/bot${k}/getMe` : "https://api.telegram.org/", needsKey: k ? undefined : "TELEGRAM_BOT_TOKEN" });
+  }
+  if (!args.service || args.service === "lovable_ai") {
+    const k = process.env.LOVABLE_API_KEY;
+    probes.push({ name: "lovable_ai", url: "https://ai.gateway.lovable.dev/v1/models", headers: k ? { Authorization: `Bearer ${k}` } : undefined, needsKey: k ? undefined : "LOVABLE_API_KEY" });
+  }
+
+  const results = await Promise.all(probes.map(async (p) => {
+    if (p.needsKey) return { service: p.name, configured: false, ok: false, message: `Missing secret: ${p.needsKey}` };
+    const start = Date.now();
+    try {
+      const res = await fetch(p.url, { headers: p.headers, method: "GET" });
+      return { service: p.name, configured: true, ok: res.ok, status: res.status, latencyMs: Date.now() - start };
+    } catch (e) {
+      return { service: p.name, configured: true, ok: false, message: e instanceof Error ? e.message : "fetch failed", latencyMs: Date.now() - start };
+    }
+  }));
+
+  return { results };
 }
 
 const TOOLS = [
@@ -166,6 +193,7 @@ const TOOLS = [
   { type: "function", function: { name: "list_secrets", description: "List all API keys/secrets stored in admin_secrets (values are never exposed; you'll only see whether each is configured).", parameters: { type: "object", properties: {} } } },
   { type: "function", function: { name: "set_secret", description: "Add or update an API key in admin_secrets. Use UPPER_SNAKE_CASE for the key. The value is written verbatim and used by server functions (Paystack, Tiingo, Telegram, Stripe, etc.).", parameters: { type: "object", properties: { key: { type: "string" }, value: { type: "string" }, description: { type: "string" } }, required: ["key", "value"] } } },
   { type: "function", function: { name: "recent_audit", description: "Show recent admin actions from the audit log.", parameters: { type: "object", properties: { limit: { type: "number" } } } } },
+  { type: "function", function: { name: "check_api", description: "Probe the health of an external API (Tiingo, Paystack, Telegram, Lovable AI gateway, or a custom URL). Returns latency, HTTP status, and whether each is configured.", parameters: { type: "object", properties: { service: { type: "string", enum: ["tiingo", "paystack", "telegram", "lovable_ai"] }, url: { type: "string" } } } } },
 ];
 
 async function runTool(name: string, args: Record<string, unknown>, actorId: string): Promise<unknown> {
@@ -180,7 +208,7 @@ async function runTool(name: string, args: Record<string, unknown>, actorId: str
     case "list_secrets": return tool_list_secrets();
     case "set_secret": return tool_set_secret(args as { key: string; value: string; description?: string }, actorId);
     case "recent_audit": return tool_recent_audit(args as { limit?: number });
-    case "db_query": return tool_db_query(args as { sql: string; params?: unknown[] });
+    case "check_api": return tool_check_api(args as { service?: "tiingo" | "paystack" | "telegram" | "lovable_ai"; url?: string });
     default: throw new Error(`Unknown tool: ${name}`);
   }
 }
@@ -207,7 +235,8 @@ export const adminAssistantChat = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     const systemPrompt = `You are the Trade Genius Admin Assistant. You help the founder manage their AI Forex SaaS platform.
-You can lookup users, suspend/unsuspend them, grant any plan for free, change roles, manage support tickets, and read metrics.
+You can lookup users, suspend/unsuspend them, grant any plan for free, change roles, manage support tickets, read metrics, list/set API secrets, view audit logs, and probe external API health (Tiingo, Paystack, Telegram, Lovable AI) with the check_api tool.
+When the user asks whether an API or integration is working, call check_api and report latency, HTTP status, and configured/missing keys plainly.
 ALWAYS confirm destructive actions in your reply with concrete details (which user, which plan).
 When the user asks about "a user" without specifics, call lookup_user first.
 Keep responses concise and action-oriented. Use markdown.`;
