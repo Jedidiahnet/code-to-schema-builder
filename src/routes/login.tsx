@@ -66,7 +66,7 @@ function LoginPage() {
   const onGoogle = async () => {
     setBusy(true);
     setErr(null);
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
     if (res.error) { setErr(res.error.message); setBusy(false); }
   };
 
