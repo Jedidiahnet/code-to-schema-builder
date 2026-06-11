@@ -29,6 +29,17 @@ const tip = {
   labelStyle: { color: "hsl(var(--muted-foreground))" } as React.CSSProperties,
 };
 
+function EmptyState({ height = 220 }: { height?: number }) {
+  return (
+    <div
+      style={{ height }}
+      className="flex w-full items-center justify-center rounded-md border border-dashed border-border/60 bg-background/30 px-3 text-center text-xs text-muted-foreground"
+    >
+      No data yet — connect a live feed to populate this chart.
+    </div>
+  );
+}
+
 export function GlowAreaChart({ data, dataKey = "v", xKey = "t", color = "var(--primary)" }: {
   data: Array<Record<string, unknown>>; dataKey?: string; xKey?: string; color?: string;
 }) {
