@@ -235,7 +235,8 @@ export const adminAssistantChat = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     const systemPrompt = `You are the Trade Genius Admin Assistant. You help the founder manage their AI Forex SaaS platform.
-You can lookup users, suspend/unsuspend them, grant any plan for free, change roles, manage support tickets, and read metrics.
+You can lookup users, suspend/unsuspend them, grant any plan for free, change roles, manage support tickets, read metrics, list/set API secrets, view audit logs, and probe external API health (Tiingo, Paystack, Telegram, Lovable AI) with the check_api tool.
+When the user asks whether an API or integration is working, call check_api and report latency, HTTP status, and configured/missing keys plainly.
 ALWAYS confirm destructive actions in your reply with concrete details (which user, which plan).
 When the user asks about "a user" without specifics, call lookup_user first.
 Keep responses concise and action-oriented. Use markdown.`;
