@@ -193,6 +193,7 @@ const TOOLS = [
   { type: "function", function: { name: "list_secrets", description: "List all API keys/secrets stored in admin_secrets (values are never exposed; you'll only see whether each is configured).", parameters: { type: "object", properties: {} } } },
   { type: "function", function: { name: "set_secret", description: "Add or update an API key in admin_secrets. Use UPPER_SNAKE_CASE for the key. The value is written verbatim and used by server functions (Paystack, Tiingo, Telegram, Stripe, etc.).", parameters: { type: "object", properties: { key: { type: "string" }, value: { type: "string" }, description: { type: "string" } }, required: ["key", "value"] } } },
   { type: "function", function: { name: "recent_audit", description: "Show recent admin actions from the audit log.", parameters: { type: "object", properties: { limit: { type: "number" } } } } },
+  { type: "function", function: { name: "check_api", description: "Probe the health of an external API (Tiingo, Paystack, Telegram, Lovable AI gateway, or a custom URL). Returns latency, HTTP status, and whether each is configured.", parameters: { type: "object", properties: { service: { type: "string", enum: ["tiingo", "paystack", "telegram", "lovable_ai"] }, url: { type: "string" } } } } },
 ];
 
 async function runTool(name: string, args: Record<string, unknown>, actorId: string): Promise<unknown> {
@@ -207,7 +208,7 @@ async function runTool(name: string, args: Record<string, unknown>, actorId: str
     case "list_secrets": return tool_list_secrets();
     case "set_secret": return tool_set_secret(args as { key: string; value: string; description?: string }, actorId);
     case "recent_audit": return tool_recent_audit(args as { limit?: number });
-    case "db_query": return tool_db_query(args as { sql: string; params?: unknown[] });
+    case "check_api": return tool_check_api(args as { service?: "tiingo" | "paystack" | "telegram" | "lovable_ai"; url?: string });
     default: throw new Error(`Unknown tool: ${name}`);
   }
 }
