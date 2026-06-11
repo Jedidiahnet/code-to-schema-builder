@@ -61,7 +61,7 @@ function AuthLayout() {
         }
       />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-border/60 bg-background/70 px-4 py-2.5 backdrop-blur lg:px-6">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-border/60 bg-background/70 px-4 py-2.5 pl-16 backdrop-blur lg:pl-6 lg:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="font-display text-xs text-glow lg:hidden">TRADSIG</Link>
           <div className="flex items-center gap-2 text-xs">
             <span className="hidden text-muted-foreground sm:inline">{isAdmin ? "Admin" : "Trader"}</span>
