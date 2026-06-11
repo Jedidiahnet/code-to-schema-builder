@@ -143,16 +143,43 @@ async function tool_recent_audit(args: { limit?: number }) {
   return { logs: data ?? [] };
 }
 
-async function tool_db_query(args: { sql: string; params?: unknown[] }) {
-  // Read-only safety: only allow single SELECT statements.
-  const sql = args.sql.trim();
-  if (!/^select\b/i.test(sql) || /;.*\S/.test(sql.replace(/;\s*$/, ""))) {
-    throw new Error("Only single SELECT statements are allowed.");
+// Health-check an external API (Tiingo, Paystack, Telegram, or a custom URL).
+async function tool_check_api(args: { service?: "tiingo" | "paystack" | "telegram" | "lovable_ai"; url?: string }) {
+  const { getSecret } = await import("./secret-store.server");
+  type Probe = { name: string; url: string; headers?: Record<string, string>; needsKey?: string };
+  const probes: Probe[] = [];
+
+  if (args.url) probes.push({ name: "custom", url: args.url });
+
+  if (!args.service || args.service === "tiingo") {
+    const k = (await getSecret("TIINGO_API_KEY")) ?? process.env.TIINGO_API_KEY;
+    probes.push({ name: "tiingo", url: "https://api.tiingo.com/api/test?format=json", headers: k ? { Authorization: `Token ${k}` } : undefined, needsKey: k ? undefined : "TIINGO_API_KEY" });
   }
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  // Use Postgres SQL via PostgREST RPC isn't available; fall back to constrained selects.
-  // We expose this as a stub for transparency — admins should use specific tools.
-  return { error: "Direct SQL is disabled. Use lookup_user, metrics, or other tools.", attempted_sql: sql };
+  if (!args.service || args.service === "paystack") {
+    const k = (await getSecret("PAYSTACK_SECRET_KEY")) ?? process.env.PAYSTACK_SECRET_KEY;
+    probes.push({ name: "paystack", url: "https://api.paystack.co/bank?country=ghana&perPage=1", headers: k ? { Authorization: `Bearer ${k}` } : undefined, needsKey: k ? undefined : "PAYSTACK_SECRET_KEY" });
+  }
+  if (!args.service || args.service === "telegram") {
+    const k = (await getSecret("TELEGRAM_BOT_TOKEN")) ?? process.env.TELEGRAM_BOT_TOKEN;
+    probes.push({ name: "telegram", url: k ? `https://api.telegram.org/bot${k}/getMe` : "https://api.telegram.org/", needsKey: k ? undefined : "TELEGRAM_BOT_TOKEN" });
+  }
+  if (!args.service || args.service === "lovable_ai") {
+    const k = process.env.LOVABLE_API_KEY;
+    probes.push({ name: "lovable_ai", url: "https://ai.gateway.lovable.dev/v1/models", headers: k ? { Authorization: `Bearer ${k}` } : undefined, needsKey: k ? undefined : "LOVABLE_API_KEY" });
+  }
+
+  const results = await Promise.all(probes.map(async (p) => {
+    if (p.needsKey) return { service: p.name, configured: false, ok: false, message: `Missing secret: ${p.needsKey}` };
+    const start = Date.now();
+    try {
+      const res = await fetch(p.url, { headers: p.headers, method: "GET" });
+      return { service: p.name, configured: true, ok: res.ok, status: res.status, latencyMs: Date.now() - start };
+    } catch (e) {
+      return { service: p.name, configured: true, ok: false, message: e instanceof Error ? e.message : "fetch failed", latencyMs: Date.now() - start };
+    }
+  }));
+
+  return { results };
 }
 
 const TOOLS = [
