@@ -10,12 +10,17 @@ const FEATURES = [
   { icon: Zap, title: "Real-time Engine", desc: "Live forex candles refreshed every 30s across 1m, 5m and 15m." },
 ];
 
-const TICKER = ["EUR/USD ▲ 1.0867", "BTC/USD ▼ 67,210", "GBP/USD ▲ 1.2741", "XAU/USD ▲ 2,344.10", "USD/JPY ▼ 156.32", "ETH/USD ▲ 3,328"];
+const TAGLINES = [
+  "12 AI agents live · ready for your first signal",
+  "Multi-timeframe analysis · 1m / 5m / 15m",
+  "Risk-aware council · no fabricated trades",
+  "Connect your broker · MT4 / MT5 / webhook",
+];
 
 export function HeroLanding() {
   const [tickerIdx, setTickerIdx] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setTickerIdx((i) => (i + 1) % TICKER.length), 1800);
+    const t = setInterval(() => setTickerIdx((i) => (i + 1) % TAGLINES.length), 2400);
     return () => clearInterval(t);
   }, []);
 
@@ -49,7 +54,7 @@ export function HeroLanding() {
       <section className="relative mx-auto max-w-7xl px-6 pb-24 pt-16 text-center">
         <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur">
           <span className="h-1.5 w-1.5 rounded-full bg-bull pulse-ring" />
-          Multi-AI engine online · {TICKER[tickerIdx]}
+          Multi-AI engine online · {TAGLINES[tickerIdx]}
         </div>
         <h1 className="mx-auto mt-6 max-w-4xl font-display text-5xl leading-tight md:text-7xl">
           <span className="text-foreground">Predict the next move.</span>
