@@ -43,6 +43,7 @@ function EmptyState({ height = 220 }: { height?: number }) {
 export function GlowAreaChart({ data, dataKey = "v", xKey = "t", color = "var(--primary)" }: {
   data: Array<Record<string, unknown>>; dataKey?: string; xKey?: string; color?: string;
 }) {
+  if (!data || data.length === 0) return <EmptyState />;
   return (
     <ResponsiveContainer width="100%" height={220}>
       <AreaChart data={data}>
