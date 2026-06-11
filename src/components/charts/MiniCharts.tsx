@@ -66,6 +66,7 @@ export function GlowAreaChart({ data, dataKey = "v", xKey = "t", color = "var(--
 export function StackedBars({ data, keys }: {
   data: Array<Record<string, unknown>>; keys: { key: string; color: string; label: string }[];
 }) {
+  if (!data || data.length === 0) return <EmptyState height={240} />;
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={data}>
@@ -85,6 +86,7 @@ export function StackedBars({ data, keys }: {
 export function MultiLine({ data, keys }: {
   data: Array<Record<string, unknown>>; keys: { key: string; color: string; label: string }[];
 }) {
+  if (!data || data.length === 0) return <EmptyState height={240} />;
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart data={data}>
@@ -102,6 +104,7 @@ export function MultiLine({ data, keys }: {
 }
 
 export function DonutChart({ data }: { data: { name: string; value: number; color: string }[] }) {
+  if (!data || data.length === 0) return <EmptyState />;
   return (
     <ResponsiveContainer width="100%" height={220}>
       <PieChart>
