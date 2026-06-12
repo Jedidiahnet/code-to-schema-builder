@@ -3,6 +3,8 @@ import { PageHeader, Section } from "@/components/PageShell";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/support/broadcast")({
   component: Broadcast,
@@ -10,30 +12,24 @@ export const Route = createFileRoute("/_authenticated/admin/support/broadcast")(
 });
 
 function Broadcast() {
+  const [msg, setMsg] = useState("");
+  const [audience, setAudience] = useState("all");
+  const [level, setLevel] = useState("info");
   return (
     <>
-      <PageHeader title="System Broadcast Center" subtitle="Push in-app banners and Telegram/Discord notifications." />
-      <div className="grid gap-4 p-4 lg:grid-cols-2 lg:p-8">
-        <Section title="In-app banner">
-          <Textarea placeholder="⚠️ Expect high volatility during today's US NFP Release" rows={4} />
+      <PageHeader title="System Broadcast" subtitle="Send a banner or push to your users." />
+      <div className="p-4 lg:p-8">
+        <Section title="Compose message">
+          <Textarea value={msg} onChange={(e) => setMsg(e.target.value)} rows={5} placeholder="e.g. Scheduled maintenance Sunday 02:00 UTC." />
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <Select defaultValue="all"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
-              <SelectItem value="all">All users</SelectItem><SelectItem value="free">Free tier</SelectItem><SelectItem value="paid">Paid</SelectItem><SelectItem value="eurusd">EUR/USD traders</SelectItem>
+            <Select value={audience} onValueChange={setAudience}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
+              <SelectItem value="all">All users</SelectItem><SelectItem value="paid">Paid subscribers</SelectItem><SelectItem value="free">Free tier</SelectItem>
             </SelectContent></Select>
-            <Select defaultValue="info"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
+            <Select value={level} onValueChange={setLevel}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
               <SelectItem value="info">Info</SelectItem><SelectItem value="warn">Warning</SelectItem><SelectItem value="critical">Critical</SelectItem>
             </SelectContent></Select>
           </div>
-          <Button className="mt-3 w-full">Publish banner</Button>
-        </Section>
-        <Section title="Push notification">
-          <Textarea placeholder="Notification body…" rows={4} />
-          <div className="mt-3 flex flex-wrap gap-2">
-            {["In-app","Telegram","Discord","Browser"].map(ch => (
-              <label key={ch} className="flex items-center gap-1 text-xs"><input type="checkbox" defaultChecked /> {ch}</label>
-            ))}
-          </div>
-          <Button className="mt-3 w-full" variant="secondary">Dispatch</Button>
+          <Button className="mt-3 w-full" disabled={!msg.trim()} onClick={() => toast("Broadcast dispatch endpoint coming soon — message saved as draft.")}>Publish</Button>
         </Section>
       </div>
     </>

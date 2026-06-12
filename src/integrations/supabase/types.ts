@@ -373,6 +373,101 @@ export type Database = {
         }
         Relationships: []
       }
+      user_bot_subscribers: {
+        Row: {
+          bot_id: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          owner_payout_cents: number
+          paid_cents: number
+          platform_fee_cents: number
+          status: string
+          telegram_user_id: number
+          telegram_username: string | null
+          updated_at: string
+        }
+        Insert: {
+          bot_id: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          owner_payout_cents?: number
+          paid_cents?: number
+          platform_fee_cents?: number
+          status?: string
+          telegram_user_id: number
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bot_id?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          owner_payout_cents?: number
+          paid_cents?: number
+          platform_fee_cents?: number
+          status?: string
+          telegram_user_id?: number
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_bot_subscribers_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "user_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_bots: {
+        Row: {
+          bot_token: string
+          bot_username: string | null
+          created_at: string
+          currency: string
+          display_name: string | null
+          enabled: boolean
+          id: string
+          owner_id: string
+          period_days: number
+          price_cents: number
+          revshare_pct: number
+          updated_at: string
+        }
+        Insert: {
+          bot_token: string
+          bot_username?: string | null
+          created_at?: string
+          currency?: string
+          display_name?: string | null
+          enabled?: boolean
+          id?: string
+          owner_id: string
+          period_days?: number
+          price_cents?: number
+          revshare_pct?: number
+          updated_at?: string
+        }
+        Update: {
+          bot_token?: string
+          bot_username?: string | null
+          created_at?: string
+          currency?: string
+          display_name?: string | null
+          enabled?: boolean
+          id?: string
+          owner_id?: string
+          period_days?: number
+          price_cents?: number
+          revshare_pct?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
