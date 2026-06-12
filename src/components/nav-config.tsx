@@ -46,7 +46,8 @@ export const userNav: NavSection[] = [
     { to: "/dashboard/macro", label: "Macro Insights", icon: <Globe2 className="h-3.5 w-3.5" /> },
   ]},
   { label: "Automation", items: [
-    { to: "/dashboard/automation", label: "Webhooks & Sync", icon: <Bot className="h-3.5 w-3.5" /> },
+    { to: "/dashboard/bot", label: "Telegram Bot", icon: <Bot className="h-3.5 w-3.5" /> },
+    { to: "/dashboard/automation", label: "Webhooks & Sync", icon: <Radio className="h-3.5 w-3.5" /> },
     { to: "/dashboard/sandbox", label: "Strategy Sandbox", icon: <FlaskConical className="h-3.5 w-3.5" /> },
   ]},
   { label: "Performance", items: [

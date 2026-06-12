@@ -1,42 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, Section } from "@/components/PageShell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { PageHeader, Card, Section } from "@/components/PageShell";
+
+export const adminListStaff = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roles } = await supabaseAdmin.from("user_roles").select("role").eq("user_id", context.userId);
+    if (!roles?.some((r) => r.role === "admin")) throw new Error("Admin required");
+    const { data: staff } = await supabaseAdmin
+      .from("user_roles")
+      .select("user_id,role")
+      .in("role", ["admin"]);
+    if (!staff?.length) return [];
+    const { data: profiles } = await supabaseAdmin
+      .from("profiles")
+      .select("id,email,display_name")
+      .in("id", staff.map((s) => s.user_id));
+    const pmap = new Map((profiles ?? []).map((p) => [p.id, p]));
+    return staff.map((s) => ({ ...s, email: pmap.get(s.user_id)?.email ?? null, display_name: pmap.get(s.user_id)?.display_name ?? null }));
+  });
 
 export const Route = createFileRoute("/_authenticated/admin/settings/team")({
   component: Team,
   head: () => ({ meta: [{ title: "Staff · Admin" }] }),
 });
 
-const STAFF = [
-  { email: "mimmico112@gmail.com", role: "owner", last: "now" },
-  { email: "support@trad.sig", role: "support", last: "2h ago" },
-];
-
 function Team() {
+  const fn = useServerFn(adminListStaff);
+  const q = useQuery({ queryKey: ["admin-staff"], queryFn: () => fn() });
+  const rows = q.data ?? [];
+
   return (
     <>
-      <PageHeader title="Staff (RBAC)" subtitle="Invite teammates and set fine-grained permissions." />
-      <div className="grid gap-4 p-4 lg:grid-cols-2 lg:p-8">
-        <Section title="Roster">
-          <table className="w-full text-sm">
-            <thead className="text-xs uppercase text-muted-foreground"><tr><th className="p-2 text-left">Email</th><th className="p-2">Role</th><th className="p-2">Last login</th></tr></thead>
-            <tbody>{STAFF.map(s => (
-              <tr key={s.email} className="border-t border-border/40"><td className="p-2">{s.email}</td><td className="p-2 text-center capitalize">{s.role}</td><td className="p-2 text-center text-xs text-muted-foreground">{s.last}</td></tr>
-            ))}</tbody>
-          </table>
-        </Section>
-        <Section title="Invite teammate">
-          <div className="flex gap-2"><Input placeholder="email@company.com" /><Button>Send invite</Button></div>
-          <h3 className="mt-4 text-xs uppercase text-muted-foreground">Role permissions</h3>
-          <table className="mt-2 w-full text-xs">
-            <thead><tr><th></th>{["Owner","Admin","Support"].map(r => <th key={r} className="p-1 text-center">{r}</th>)}</tr></thead>
-            <tbody>{["View secrets","Issue comp days","Refund","Edit prompts"].map(p => (
-              <tr key={p} className="border-t border-border/40"><td className="p-1">{p}</td>{[true,true,p === "Issue comp days"].map((on, i) => (
-                <td key={i} className="p-1 text-center">{on ? "✓" : "—"}</td>
-              ))}</tr>
-            ))}</tbody>
-          </table>
+      <PageHeader title="Staff (RBAC)" subtitle="Users with admin role on this workspace." />
+      <div className="p-4 lg:p-8">
+        <Section title="Current admins">
+          {rows.length === 0 ? (
+            <Card className="bg-background/40 text-xs text-muted-foreground">
+              {q.isLoading ? "Loading…" : "No admins yet. Use the Admin AI Assistant to grant the admin role to a user."}
+            </Card>
+          ) : (
+            <table className="w-full text-sm">
+              <thead className="text-xs uppercase text-muted-foreground"><tr><th className="p-2 text-left">Email</th><th className="p-2 text-left">Name</th><th className="p-2 text-left">Role</th></tr></thead>
+              <tbody>{rows.map((s) => (
+                <tr key={s.user_id} className="border-t border-border/40"><td className="p-2">{s.email}</td><td className="p-2">{s.display_name ?? "—"}</td><td className="p-2 capitalize">{s.role}</td></tr>
+              ))}</tbody>
+            </table>
+          )}
         </Section>
       </div>
     </>

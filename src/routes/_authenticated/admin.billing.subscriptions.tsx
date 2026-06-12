@@ -1,59 +1,74 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { PageHeader, Card, Stat } from "@/components/PageShell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+
+export const adminListSubs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roles } = await supabaseAdmin.from("user_roles").select("role").eq("user_id", context.userId);
+    if (!roles?.some((r) => r.role === "admin")) throw new Error("Admin required");
+    const { data } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id,user_id,plan,status,current_period_end,created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (!data?.length) return [];
+    const ids = data.map((s) => s.user_id);
+    const { data: profiles } = await supabaseAdmin.from("profiles").select("id,email,public_code").in("id", ids);
+    const pmap = new Map((profiles ?? []).map((p) => [p.id, p]));
+    return data.map((s) => ({ ...s, email: pmap.get(s.user_id)?.email ?? null, code: pmap.get(s.user_id)?.public_code ?? null }));
+  });
 
 export const Route = createFileRoute("/_authenticated/admin/billing/subscriptions")({
   component: SubsAdmin,
   head: () => ({ meta: [{ title: "Subscriptions · Admin" }] }),
 });
 
-const SUBS = Array.from({ length: 14 }).map((_, i) => ({
-  email: `trader${i + 1}@trad.sig`,
-  plan: (["basic", "pro", "elite", "quantum"] as const)[i % 4],
-  renewsIn: 30 - ((i * 3) % 30),
-  status: i % 9 === 0 ? "past_due" : "active",
-}));
-
 function SubsAdmin() {
-  const [comp, setComp] = useState<Record<string, number>>({});
+  const fn = useServerFn(adminListSubs);
+  const q = useQuery({ queryKey: ["admin-subs"], queryFn: () => fn() });
+  const rows = q.data ?? [];
+
+  const active = rows.filter((s) => ["active", "trialing"].includes(s.status));
+  const pastDue = rows.filter((s) => s.status === "past_due");
+
   return (
     <>
-      <PageHeader title="Subscription Management" subtitle="Active subscribers, comped days and force-renewal controls." />
+      <PageHeader title="Subscription Management" subtitle="Live subscriptions across all plans." />
       <div className="grid gap-3 p-4 sm:grid-cols-4 lg:p-8">
-        <Stat label="Active subs" value={SUBS.filter(s => s.status === "active").length} tone="bull" />
-        <Stat label="Past due" value={SUBS.filter(s => s.status === "past_due").length} tone="bear" />
-        <Stat label="Quantum" value={SUBS.filter(s => s.plan === "quantum").length} tone="accent" />
-        <Stat label="ARPU" value="$87" tone="primary" />
+        <Stat label="Active" value={active.length} tone="bull" />
+        <Stat label="Past due" value={pastDue.length} tone="bear" />
+        <Stat label="Quantum" value={active.filter((s) => s.plan === "quantum").length} tone="accent" />
+        <Stat label="Elite" value={active.filter((s) => s.plan === "elite").length} tone="primary" />
       </div>
       <div className="px-4 pb-8 lg:px-8">
         <Card className="overflow-x-auto p-0">
-          <table className="w-full min-w-[800px] text-sm">
-            <thead className="text-xs uppercase text-muted-foreground"><tr>
-              <th className="p-3 text-left">User</th><th className="p-3 text-left">Plan</th><th className="p-3 text-left">Renews in</th><th className="p-3 text-left">Status</th><th className="p-3 text-left">Comp days</th><th className="p-3"></th>
-            </tr></thead>
-            <tbody>
-              {SUBS.map(s => (
-                <tr key={s.email} className="border-t border-border/40">
-                  <td className="p-3">{s.email}</td>
-                  <td className="p-3">
-                    <Select defaultValue={s.plan}>
-                      <SelectTrigger className="h-8 w-28 text-xs"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {["basic", "pro", "elite", "quantum"].map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </td>
-                  <td className="p-3 text-xs">{s.renewsIn} d</td>
-                  <td className="p-3"><span className={`rounded px-2 py-0.5 text-[10px] uppercase ${s.status === "active" ? "bg-bull/15 text-bull" : "bg-bear/15 text-bear"}`}>{s.status}</span></td>
-                  <td className="p-3"><Input type="number" min={0} className="h-8 w-20" value={comp[s.email] ?? 0} onChange={(e) => setComp({ ...comp, [s.email]: Number(e.target.value) })} /></td>
-                  <td className="p-3 text-right"><Button size="sm" variant="outline">Force renew</Button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {rows.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              {q.isLoading ? "Loading…" : "No subscriptions yet. Use the User Directory to grant plans manually, or wait for paid sign-ups."}
+            </div>
+          ) : (
+            <table className="w-full min-w-[800px] text-sm">
+              <thead className="text-xs uppercase text-muted-foreground"><tr>
+                <th className="p-3 text-left">Code</th><th className="p-3 text-left">User</th><th className="p-3 text-left">Plan</th><th className="p-3 text-left">Status</th><th className="p-3 text-left">Renews</th>
+              </tr></thead>
+              <tbody>
+                {rows.map((s) => (
+                  <tr key={s.id} className="border-t border-border/40">
+                    <td className="p-3 font-mono text-xs text-primary">{s.code ?? "—"}</td>
+                    <td className="p-3">{s.email ?? "—"}</td>
+                    <td className="p-3 capitalize">{s.plan}</td>
+                    <td className="p-3"><span className={`rounded px-2 py-0.5 text-[10px] uppercase ${s.status === "active" ? "bg-bull/15 text-bull" : "bg-bear/15 text-bear"}`}>{s.status}</span></td>
+                    <td className="p-3 text-xs text-muted-foreground">{s.current_period_end ? new Date(s.current_period_end).toLocaleDateString() : "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </Card>
       </div>
     </>
