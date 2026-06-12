@@ -14,7 +14,10 @@ function AdminDashboard() {
   const fn = useServerFn(adminMetrics);
   const auditFn = useServerFn(listAuditLogs);
   const q = useQuery({ queryKey: ["admin-metrics"], queryFn: () => fn() });
-  const auditQ = useQuery({ queryKey: ["admin-audit-recent"], queryFn: () => auditFn({ data: { limit: 8 } }).catch(() => []) });
+  const auditQ = useQuery({
+    queryKey: ["admin-audit-recent"],
+    queryFn: () => auditFn({ data: { limit: 8 } }).then((r) => r.logs).catch(() => []),
+  });
   const m = q.data;
 
   const activity = (auditQ.data ?? []) as Array<{ id: string; action: string; actor_email: string | null; created_at: string }>;
