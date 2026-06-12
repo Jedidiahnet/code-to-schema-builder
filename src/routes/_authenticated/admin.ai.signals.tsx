@@ -41,13 +41,13 @@ function SignalLog() {
           ) : (
             <table className="w-full min-w-[700px] text-sm">
               <thead className="text-xs uppercase text-muted-foreground"><tr>
-                <th className="p-3 text-left">Pair</th><th className="p-3">Action</th><th className="p-3">Confidence</th><th className="p-3">When</th>
+                <th className="p-3 text-left">Pair</th><th className="p-3">Decision</th><th className="p-3">Confidence</th><th className="p-3">When</th>
               </tr></thead>
               <tbody>
                 {rows.map((s) => (
                   <tr key={s.id} className="border-t border-border/40">
                     <td className="p-3 font-mono text-xs">{s.pair ?? "—"}</td>
-                    <td className="p-3 text-center font-semibold">{s.action ?? "—"}</td>
+                    <td className="p-3 text-center font-semibold">{s.decision ?? "—"}</td>
                     <td className="p-3 text-center text-xs">{s.confidence ?? "—"}</td>
                     <td className="p-3 text-center text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()}</td>
                   </tr>
