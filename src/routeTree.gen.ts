@@ -48,6 +48,7 @@ import { Route as AuthenticatedAdminBillingTransactionsRouteImport } from './rou
 import { Route as AuthenticatedAdminBillingSubscriptionsRouteImport } from './routes/_authenticated/admin.billing.subscriptions'
 import { Route as AuthenticatedAdminBillingAnalyticsRouteImport } from './routes/_authenticated/admin.billing.analytics'
 import { Route as AuthenticatedAdminBillingAffiliatesRouteImport } from './routes/_authenticated/admin.billing.affiliates'
+import { Route as AuthenticatedAdminAutomationBotsRouteImport } from './routes/_authenticated/admin.automation.bots'
 import { Route as AuthenticatedAdminAiSignalsRouteImport } from './routes/_authenticated/admin.ai.signals'
 import { Route as AuthenticatedAdminAiPlaygroundRouteImport } from './routes/_authenticated/admin.ai.playground'
 import { Route as AuthenticatedAdminAiFeedsRouteImport } from './routes/_authenticated/admin.ai.feeds'
@@ -272,6 +273,12 @@ const AuthenticatedAdminBillingAffiliatesRoute =
     path: '/admin/billing/affiliates',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminAutomationBotsRoute =
+  AuthenticatedAdminAutomationBotsRouteImport.update({
+    id: '/admin/automation/bots',
+    path: '/admin/automation/bots',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminAiSignalsRoute =
   AuthenticatedAdminAiSignalsRouteImport.update({
     id: '/admin/ai/signals',
@@ -327,6 +334,7 @@ export interface FileRoutesByFullPath {
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -371,6 +379,7 @@ export interface FileRoutesByTo {
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -417,6 +426,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/_authenticated/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/_authenticated/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/_authenticated/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/_authenticated/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/_authenticated/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/_authenticated/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -463,6 +473,7 @@ export interface FileRouteTypes {
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
     | '/admin/ai/signals'
+    | '/admin/automation/bots'
     | '/admin/billing/affiliates'
     | '/admin/billing/analytics'
     | '/admin/billing/subscriptions'
@@ -507,6 +518,7 @@ export interface FileRouteTypes {
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
     | '/admin/ai/signals'
+    | '/admin/automation/bots'
     | '/admin/billing/affiliates'
     | '/admin/billing/analytics'
     | '/admin/billing/subscriptions'
@@ -552,6 +564,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/ai/feeds'
     | '/_authenticated/admin/ai/playground'
     | '/_authenticated/admin/ai/signals'
+    | '/_authenticated/admin/automation/bots'
     | '/_authenticated/admin/billing/affiliates'
     | '/_authenticated/admin/billing/analytics'
     | '/_authenticated/admin/billing/subscriptions'
@@ -856,6 +869,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBillingAffiliatesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/automation/bots': {
+      id: '/_authenticated/admin/automation/bots'
+      path: '/admin/automation/bots'
+      fullPath: '/admin/automation/bots'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationBotsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/ai/signals': {
       id: '/_authenticated/admin/ai/signals'
       path: '/admin/ai/signals'
@@ -946,6 +966,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAiFeedsRoute: typeof AuthenticatedAdminAiFeedsRoute
   AuthenticatedAdminAiPlaygroundRoute: typeof AuthenticatedAdminAiPlaygroundRoute
   AuthenticatedAdminAiSignalsRoute: typeof AuthenticatedAdminAiSignalsRoute
+  AuthenticatedAdminAutomationBotsRoute: typeof AuthenticatedAdminAutomationBotsRoute
   AuthenticatedAdminBillingAffiliatesRoute: typeof AuthenticatedAdminBillingAffiliatesRoute
   AuthenticatedAdminBillingAnalyticsRoute: typeof AuthenticatedAdminBillingAnalyticsRoute
   AuthenticatedAdminBillingSubscriptionsRoute: typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -971,6 +992,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAiFeedsRoute: AuthenticatedAdminAiFeedsRoute,
   AuthenticatedAdminAiPlaygroundRoute: AuthenticatedAdminAiPlaygroundRoute,
   AuthenticatedAdminAiSignalsRoute: AuthenticatedAdminAiSignalsRoute,
+  AuthenticatedAdminAutomationBotsRoute: AuthenticatedAdminAutomationBotsRoute,
   AuthenticatedAdminBillingAffiliatesRoute:
     AuthenticatedAdminBillingAffiliatesRoute,
   AuthenticatedAdminBillingAnalyticsRoute:
@@ -1008,3 +1030,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
