@@ -31,6 +31,7 @@ import { Route as AuthenticatedDashboardMetricsRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardMacroRouteImport } from './routes/_authenticated/dashboard.macro'
 import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
 import { Route as AuthenticatedDashboardAutomationRouteImport } from './routes/_authenticated/dashboard.automation'
+import { Route as AuthenticatedDashboardAssistantRouteImport } from './routes/_authenticated/dashboard.assistant'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSecretsRouteImport } from './routes/_authenticated/admin.secrets'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
@@ -169,6 +170,12 @@ const AuthenticatedDashboardAutomationRoute =
   AuthenticatedDashboardAutomationRouteImport.update({
     id: '/automation',
     path: '/automation',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAssistantRoute =
+  AuthenticatedDashboardAssistantRouteImport.update({
+    id: '/assistant',
+    path: '/assistant',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedAdminSettingsRoute =
@@ -321,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -366,6 +374,7 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -413,6 +422,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/_authenticated/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/_authenticated/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/_authenticated/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -460,6 +470,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/assistant'
     | '/dashboard/automation'
     | '/dashboard/bot'
     | '/dashboard/macro'
@@ -505,6 +516,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/assistant'
     | '/dashboard/automation'
     | '/dashboard/bot'
     | '/dashboard/macro'
@@ -551,6 +563,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/secrets'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/dashboard/assistant'
     | '/_authenticated/dashboard/automation'
     | '/_authenticated/dashboard/bot'
     | '/_authenticated/dashboard/macro'
@@ -750,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAutomationRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/assistant': {
+      id: '/_authenticated/dashboard/assistant'
+      path: '/assistant'
+      fullPath: '/dashboard/assistant'
+      preLoaderRoute: typeof AuthenticatedDashboardAssistantRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
       path: '/admin/settings'
@@ -908,6 +928,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardAssistantRoute: typeof AuthenticatedDashboardAssistantRoute
   AuthenticatedDashboardAutomationRoute: typeof AuthenticatedDashboardAutomationRoute
   AuthenticatedDashboardBotRoute: typeof AuthenticatedDashboardBotRoute
   AuthenticatedDashboardMacroRoute: typeof AuthenticatedDashboardMacroRoute
@@ -920,6 +941,7 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardAssistantRoute: AuthenticatedDashboardAssistantRoute,
     AuthenticatedDashboardAutomationRoute:
       AuthenticatedDashboardAutomationRoute,
     AuthenticatedDashboardBotRoute: AuthenticatedDashboardBotRoute,

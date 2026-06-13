@@ -20,6 +20,7 @@ export const adminNav: NavSection[] = [
     { to: "/admin/ai/playground", label: "Model Playground", icon: <FlaskConical className="h-3.5 w-3.5" /> },
     { to: "/admin/ai/signals", label: "Signal Audit Log", icon: <Activity className="h-3.5 w-3.5" /> },
     { to: "/admin/ai/feeds", label: "Data Feed Health", icon: <Radio className="h-3.5 w-3.5" /> },
+    { to: "/admin/automation/bots", label: "Connected Bots", icon: <Bot className="h-3.5 w-3.5" /> },
   ]},
   { label: "Users", items: [
     { to: "/admin/users/all", label: "User Directory", icon: <Users2 className="h-3.5 w-3.5" /> },
