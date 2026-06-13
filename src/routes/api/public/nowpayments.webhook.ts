@@ -35,13 +35,13 @@ export const Route = createFileRoute("/api/public/nowpayments/webhook")({
           .eq("paystack_reference", orderId).select("user_id,plan").maybeSingle();
 
         if (newStatus === "paid" && pay?.user_id && pay?.plan) {
-          // 30-day extension from now or current expiry, whichever is later.
           const { data: existing } = await supabaseAdmin
-            .from("subscriptions").select("expires_at").eq("user_id", pay.user_id).maybeSingle();
-          const base = existing?.expires_at && new Date(existing.expires_at) > new Date() ? new Date(existing.expires_at) : new Date();
-          const expires = new Date(base.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            .from("subscriptions").select("current_period_end").eq("user_id", pay.user_id).maybeSingle();
+          const base = existing?.current_period_end && new Date(existing.current_period_end) > new Date()
+            ? new Date(existing.current_period_end) : new Date();
+          const next = new Date(base.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
           await supabaseAdmin.from("subscriptions").upsert({
-            user_id: pay.user_id, plan: pay.plan, status: "active", expires_at: expires,
+            user_id: pay.user_id, plan: pay.plan, status: "active", current_period_end: next,
           }, { onConflict: "user_id" });
         }
         return new Response("ok");
