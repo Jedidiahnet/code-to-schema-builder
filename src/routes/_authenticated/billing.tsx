@@ -16,44 +16,46 @@ export const Route = createFileRoute("/_authenticated/billing")({
 function BillingPage() {
   const fetchPlan = useServerFn(getMyPlan);
   const fetchPayments = useServerFn(getMyPayments);
-  const startCheckout = useServerFn(startPaystackCheckout);
+  const startCheckout = useServerFn(startCryptoCheckout);
   const qc = useQueryClient();
 
   const planQ = useQuery({ queryKey: ["my-plan"], queryFn: () => fetchPlan() });
   const payQ = useQuery({ queryKey: ["my-payments"], queryFn: () => fetchPayments() });
 
-  // Refresh after Paystack redirects back.
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (url.searchParams.get("paystack") === "success") {
-      toast.success("Payment received. Activating your plan...");
-      url.searchParams.delete("paystack");
+    if (url.searchParams.get("crypto") === "success") {
+      toast.success("Payment received. Activating your plan…");
+      url.searchParams.delete("crypto"); url.searchParams.delete("ref");
       window.history.replaceState({}, "", url.toString());
-      // Webhook may take a moment; poll a few times.
       let tries = 0;
       const t = setInterval(() => {
         qc.invalidateQueries({ queryKey: ["my-plan"] });
         qc.invalidateQueries({ queryKey: ["my-payments"] });
-        if (++tries >= 5) clearInterval(t);
-      }, 2000);
+        if (++tries >= 8) clearInterval(t);
+      }, 2500);
       return () => clearInterval(t);
+    }
+    if (url.searchParams.get("crypto") === "cancel") {
+      toast.info("Checkout cancelled.");
+      url.searchParams.delete("crypto");
+      window.history.replaceState({}, "", url.toString());
     }
   }, [qc]);
 
   const checkoutMut = useMutation({
     mutationFn: (plan: PlanTier) => startCheckout({ data: { plan } }),
     onSuccess: (res) => {
-      if (!res?.authorization_url) {
-        toast.error("Payment provider did not return a checkout URL");
+      if (!res?.invoice_url) {
+        toast.error("Crypto provider did not return a checkout URL");
         return;
       }
-      toast.success("Redirecting to Paystack…");
-      window.location.href = res.authorization_url;
+      toast.success("Redirecting to crypto checkout…");
+      window.location.href = res.invoice_url;
     },
     onError: (e: unknown) => {
       console.error("[billing] checkout failed", e);
-      const msg = e instanceof Error ? e.message : "Could not start checkout";
-      toast.error(msg);
+      toast.error(e instanceof Error ? e.message : "Could not start checkout");
     },
   });
 
