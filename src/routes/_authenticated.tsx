@@ -8,6 +8,7 @@ import { getMyPlan } from "@/lib/subscription.functions";
 import { planLabel } from "@/lib/plans";
 import { AppSidebar } from "@/components/AppSidebar";
 import { adminNav, userNav } from "@/components/nav-config";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
