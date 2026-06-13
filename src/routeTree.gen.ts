@@ -36,6 +36,7 @@ import { Route as AuthenticatedAdminSecretsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack.webhook'
+import { Route as ApiPublicNowpaymentsWebhookRouteImport } from './routes/api/public/nowpayments.webhook'
 import { Route as AuthenticatedAdminUsersRiskRouteImport } from './routes/_authenticated/admin.users.risk'
 import { Route as AuthenticatedAdminUsersComplianceRouteImport } from './routes/_authenticated/admin.users.compliance'
 import { Route as AuthenticatedAdminUsersAllRouteImport } from './routes/_authenticated/admin.users.all'
@@ -199,6 +200,12 @@ const ApiPublicPaystackWebhookRoute =
     path: '/api/public/paystack/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicNowpaymentsWebhookRoute =
+  ApiPublicNowpaymentsWebhookRouteImport.update({
+    id: '/api/public/nowpayments/webhook',
+    path: '/api/public/nowpayments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAdminUsersRiskRoute =
   AuthenticatedAdminUsersRiskRouteImport.update({
     id: '/admin/users/risk',
@@ -331,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -374,6 +382,7 @@ export interface FileRoutesByTo {
   '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesById {
@@ -419,6 +428,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/_authenticated/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/_authenticated/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRouteTypes {
@@ -464,6 +474,7 @@ export interface FileRouteTypes {
     | '/admin/users/all'
     | '/admin/users/compliance'
     | '/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -507,6 +518,7 @@ export interface FileRouteTypes {
     | '/admin/users/all'
     | '/admin/users/compliance'
     | '/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   id:
     | '__root__'
@@ -551,6 +563,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users/all'
     | '/_authenticated/admin/users/compliance'
     | '/_authenticated/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -564,6 +577,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SupportRoute: typeof SupportRoute
   TermsRoute: typeof TermsRoute
+  ApiPublicNowpaymentsWebhookRoute: typeof ApiPublicNowpaymentsWebhookRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
 }
 
@@ -756,6 +770,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/paystack/webhook'
       fullPath: '/api/public/paystack/webhook'
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/nowpayments/webhook': {
+      id: '/api/public/nowpayments/webhook'
+      path: '/api/public/nowpayments/webhook'
+      fullPath: '/api/public/nowpayments/webhook'
+      preLoaderRoute: typeof ApiPublicNowpaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/users/risk': {
@@ -981,6 +1002,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SupportRoute: SupportRoute,
   TermsRoute: TermsRoute,
+  ApiPublicNowpaymentsWebhookRoute: ApiPublicNowpaymentsWebhookRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport
