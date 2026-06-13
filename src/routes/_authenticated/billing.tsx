@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getMyPlan, getMyPayments } from "@/lib/subscription.functions";
-import { startPaystackCheckout } from "@/lib/paystack.functions";
+import { startCryptoCheckout } from "@/lib/crypto.functions";
 import { PLANS, planLabel, type PlanTier } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/billing")({
