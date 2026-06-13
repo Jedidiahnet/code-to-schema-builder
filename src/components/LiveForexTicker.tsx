@@ -47,8 +47,8 @@ function StateBadge({ state }: { state: ReturnType<typeof useTiingoFx>["state"] 
   const map: Record<string, { label: string; cls: string }> = {
     idle: { label: "idle", cls: "bg-muted/40 text-muted-foreground" },
     connecting: { label: "connecting…", cls: "bg-yellow-500/20 text-yellow-300" },
-    open: { label: "live", cls: "bg-emerald-500/20 text-emerald-300" },
-    closed: { label: "reconnecting…", cls: "bg-yellow-500/20 text-yellow-300" },
+    open: { label: "live · WS", cls: "bg-emerald-500/20 text-emerald-300" },
+    polling: { label: "live · REST", cls: "bg-emerald-500/20 text-emerald-300" },
     error: { label: "error", cls: "bg-red-500/20 text-red-300" },
     unconfigured: { label: "no API key", cls: "bg-muted/40 text-muted-foreground" },
   };

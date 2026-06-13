@@ -31,11 +31,13 @@ import { Route as AuthenticatedDashboardMetricsRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardMacroRouteImport } from './routes/_authenticated/dashboard.macro'
 import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
 import { Route as AuthenticatedDashboardAutomationRouteImport } from './routes/_authenticated/dashboard.automation'
+import { Route as AuthenticatedDashboardAssistantRouteImport } from './routes/_authenticated/dashboard.assistant'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSecretsRouteImport } from './routes/_authenticated/admin.secrets'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack.webhook'
+import { Route as ApiPublicNowpaymentsWebhookRouteImport } from './routes/api/public/nowpayments.webhook'
 import { Route as AuthenticatedAdminUsersRiskRouteImport } from './routes/_authenticated/admin.users.risk'
 import { Route as AuthenticatedAdminUsersComplianceRouteImport } from './routes/_authenticated/admin.users.compliance'
 import { Route as AuthenticatedAdminUsersAllRouteImport } from './routes/_authenticated/admin.users.all'
@@ -47,6 +49,7 @@ import { Route as AuthenticatedAdminBillingTransactionsRouteImport } from './rou
 import { Route as AuthenticatedAdminBillingSubscriptionsRouteImport } from './routes/_authenticated/admin.billing.subscriptions'
 import { Route as AuthenticatedAdminBillingAnalyticsRouteImport } from './routes/_authenticated/admin.billing.analytics'
 import { Route as AuthenticatedAdminBillingAffiliatesRouteImport } from './routes/_authenticated/admin.billing.affiliates'
+import { Route as AuthenticatedAdminAutomationBotsRouteImport } from './routes/_authenticated/admin.automation.bots'
 import { Route as AuthenticatedAdminAiSignalsRouteImport } from './routes/_authenticated/admin.ai.signals'
 import { Route as AuthenticatedAdminAiPlaygroundRouteImport } from './routes/_authenticated/admin.ai.playground'
 import { Route as AuthenticatedAdminAiFeedsRouteImport } from './routes/_authenticated/admin.ai.feeds'
@@ -169,6 +172,12 @@ const AuthenticatedDashboardAutomationRoute =
     path: '/automation',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardAssistantRoute =
+  AuthenticatedDashboardAssistantRouteImport.update({
+    id: '/assistant',
+    path: '/assistant',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/admin/settings',
@@ -197,6 +206,12 @@ const ApiPublicPaystackWebhookRoute =
   ApiPublicPaystackWebhookRouteImport.update({
     id: '/api/public/paystack/webhook',
     path: '/api/public/paystack/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicNowpaymentsWebhookRoute =
+  ApiPublicNowpaymentsWebhookRouteImport.update({
+    id: '/api/public/nowpayments/webhook',
+    path: '/api/public/nowpayments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedAdminUsersRiskRoute =
@@ -265,6 +280,12 @@ const AuthenticatedAdminBillingAffiliatesRoute =
     path: '/admin/billing/affiliates',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminAutomationBotsRoute =
+  AuthenticatedAdminAutomationBotsRouteImport.update({
+    id: '/admin/automation/bots',
+    path: '/admin/automation/bots',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminAiSignalsRoute =
   AuthenticatedAdminAiSignalsRouteImport.update({
     id: '/admin/ai/signals',
@@ -307,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -320,6 +342,7 @@ export interface FileRoutesByFullPath {
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -331,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -350,6 +374,7 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -363,6 +388,7 @@ export interface FileRoutesByTo {
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -374,6 +400,7 @@ export interface FileRoutesByTo {
   '/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesById {
@@ -395,6 +422,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/secrets': typeof AuthenticatedAdminSecretsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRouteWithChildren
+  '/_authenticated/dashboard/assistant': typeof AuthenticatedDashboardAssistantRoute
   '/_authenticated/dashboard/automation': typeof AuthenticatedDashboardAutomationRoute
   '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/_authenticated/dashboard/macro': typeof AuthenticatedDashboardMacroRoute
@@ -408,6 +436,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/_authenticated/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
   '/_authenticated/admin/ai/signals': typeof AuthenticatedAdminAiSignalsRoute
+  '/_authenticated/admin/automation/bots': typeof AuthenticatedAdminAutomationBotsRoute
   '/_authenticated/admin/billing/affiliates': typeof AuthenticatedAdminBillingAffiliatesRoute
   '/_authenticated/admin/billing/analytics': typeof AuthenticatedAdminBillingAnalyticsRoute
   '/_authenticated/admin/billing/subscriptions': typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -419,6 +448,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users/all': typeof AuthenticatedAdminUsersAllRoute
   '/_authenticated/admin/users/compliance': typeof AuthenticatedAdminUsersComplianceRoute
   '/_authenticated/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
+  '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRouteTypes {
@@ -440,6 +470,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/assistant'
     | '/dashboard/automation'
     | '/dashboard/bot'
     | '/dashboard/macro'
@@ -453,6 +484,7 @@ export interface FileRouteTypes {
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
     | '/admin/ai/signals'
+    | '/admin/automation/bots'
     | '/admin/billing/affiliates'
     | '/admin/billing/analytics'
     | '/admin/billing/subscriptions'
@@ -464,6 +496,7 @@ export interface FileRouteTypes {
     | '/admin/users/all'
     | '/admin/users/compliance'
     | '/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -483,6 +516,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/secrets'
     | '/admin/settings'
+    | '/dashboard/assistant'
     | '/dashboard/automation'
     | '/dashboard/bot'
     | '/dashboard/macro'
@@ -496,6 +530,7 @@ export interface FileRouteTypes {
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
     | '/admin/ai/signals'
+    | '/admin/automation/bots'
     | '/admin/billing/affiliates'
     | '/admin/billing/analytics'
     | '/admin/billing/subscriptions'
@@ -507,6 +542,7 @@ export interface FileRouteTypes {
     | '/admin/users/all'
     | '/admin/users/compliance'
     | '/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   id:
     | '__root__'
@@ -527,6 +563,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/secrets'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/dashboard/assistant'
     | '/_authenticated/dashboard/automation'
     | '/_authenticated/dashboard/bot'
     | '/_authenticated/dashboard/macro'
@@ -540,6 +577,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/ai/feeds'
     | '/_authenticated/admin/ai/playground'
     | '/_authenticated/admin/ai/signals'
+    | '/_authenticated/admin/automation/bots'
     | '/_authenticated/admin/billing/affiliates'
     | '/_authenticated/admin/billing/analytics'
     | '/_authenticated/admin/billing/subscriptions'
@@ -551,6 +589,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users/all'
     | '/_authenticated/admin/users/compliance'
     | '/_authenticated/admin/users/risk'
+    | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -564,6 +603,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SupportRoute: typeof SupportRoute
   TermsRoute: typeof TermsRoute
+  ApiPublicNowpaymentsWebhookRoute: typeof ApiPublicNowpaymentsWebhookRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
 }
 
@@ -723,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAutomationRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/assistant': {
+      id: '/_authenticated/dashboard/assistant'
+      path: '/assistant'
+      fullPath: '/dashboard/assistant'
+      preLoaderRoute: typeof AuthenticatedDashboardAssistantRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
       path: '/admin/settings'
@@ -756,6 +803,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/paystack/webhook'
       fullPath: '/api/public/paystack/webhook'
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/nowpayments/webhook': {
+      id: '/api/public/nowpayments/webhook'
+      path: '/api/public/nowpayments/webhook'
+      fullPath: '/api/public/nowpayments/webhook'
+      preLoaderRoute: typeof ApiPublicNowpaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/users/risk': {
@@ -835,6 +889,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBillingAffiliatesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/automation/bots': {
+      id: '/_authenticated/admin/automation/bots'
+      path: '/admin/automation/bots'
+      fullPath: '/admin/automation/bots'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationBotsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/ai/signals': {
       id: '/_authenticated/admin/ai/signals'
       path: '/admin/ai/signals'
@@ -867,6 +928,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardAssistantRoute: typeof AuthenticatedDashboardAssistantRoute
   AuthenticatedDashboardAutomationRoute: typeof AuthenticatedDashboardAutomationRoute
   AuthenticatedDashboardBotRoute: typeof AuthenticatedDashboardBotRoute
   AuthenticatedDashboardMacroRoute: typeof AuthenticatedDashboardMacroRoute
@@ -879,6 +941,7 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardAssistantRoute: AuthenticatedDashboardAssistantRoute,
     AuthenticatedDashboardAutomationRoute:
       AuthenticatedDashboardAutomationRoute,
     AuthenticatedDashboardBotRoute: AuthenticatedDashboardBotRoute,
@@ -925,6 +988,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAiFeedsRoute: typeof AuthenticatedAdminAiFeedsRoute
   AuthenticatedAdminAiPlaygroundRoute: typeof AuthenticatedAdminAiPlaygroundRoute
   AuthenticatedAdminAiSignalsRoute: typeof AuthenticatedAdminAiSignalsRoute
+  AuthenticatedAdminAutomationBotsRoute: typeof AuthenticatedAdminAutomationBotsRoute
   AuthenticatedAdminBillingAffiliatesRoute: typeof AuthenticatedAdminBillingAffiliatesRoute
   AuthenticatedAdminBillingAnalyticsRoute: typeof AuthenticatedAdminBillingAnalyticsRoute
   AuthenticatedAdminBillingSubscriptionsRoute: typeof AuthenticatedAdminBillingSubscriptionsRoute
@@ -950,6 +1014,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAiFeedsRoute: AuthenticatedAdminAiFeedsRoute,
   AuthenticatedAdminAiPlaygroundRoute: AuthenticatedAdminAiPlaygroundRoute,
   AuthenticatedAdminAiSignalsRoute: AuthenticatedAdminAiSignalsRoute,
+  AuthenticatedAdminAutomationBotsRoute: AuthenticatedAdminAutomationBotsRoute,
   AuthenticatedAdminBillingAffiliatesRoute:
     AuthenticatedAdminBillingAffiliatesRoute,
   AuthenticatedAdminBillingAnalyticsRoute:
@@ -981,6 +1046,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SupportRoute: SupportRoute,
   TermsRoute: TermsRoute,
+  ApiPublicNowpaymentsWebhookRoute: ApiPublicNowpaymentsWebhookRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport

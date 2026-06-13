@@ -8,6 +8,7 @@ import { getMyPlan } from "@/lib/subscription.functions";
 import { planLabel } from "@/lib/plans";
 import { AppSidebar } from "@/components/AppSidebar";
 import { adminNav, userNav } from "@/components/nav-config";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
@@ -73,6 +74,7 @@ function AuthLayout() {
             {isAdmin && (
               <Link to="/dashboard" className="rounded-md border border-border px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">View as user</Link>
             )}
+            <ThemeToggle />
           </div>
         </header>
         <main className="min-w-0 flex-1">

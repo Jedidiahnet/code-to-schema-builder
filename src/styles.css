@@ -94,7 +94,7 @@
   --sidebar-ring: oklch(0.62 0.22 295);
 }
 
-.dark, :root {
+.dark {
   /* Deep violet console with amber-gold accents. */
   --background: oklch(0.13 0.04 285);
   --foreground: oklch(0.97 0.01 280);
@@ -135,7 +135,8 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: dark; }
+  html { color-scheme: light dark; }
+  html.dark { color-scheme: dark; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
