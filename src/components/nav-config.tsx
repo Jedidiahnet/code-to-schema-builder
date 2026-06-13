@@ -43,6 +43,7 @@ export const adminNav: NavSection[] = [
 export const userNav: NavSection[] = [
   { label: "Trading", items: [
     { to: "/dashboard", label: "Live Terminal", icon: <LayoutDashboard className="h-3.5 w-3.5" /> },
+    { to: "/dashboard/assistant", label: "AI Assistant", icon: <Brain className="h-3.5 w-3.5" /> },
     { to: "/dashboard/signals", label: "Signal Archive", icon: <Activity className="h-3.5 w-3.5" /> },
     { to: "/dashboard/macro", label: "Macro Insights", icon: <Globe2 className="h-3.5 w-3.5" /> },
   ]},
