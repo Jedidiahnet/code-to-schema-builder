@@ -107,14 +107,14 @@ function BillingPage() {
                 <span className="font-display text-3xl">${p.priceMonthly}</span>
                 <span className="text-xs text-muted-foreground">/mo</span>
               </div>
-              <div className="text-[11px] text-muted-foreground">GHS {p.priceGhsMonthly} via Paystack</div>
+              <div className="text-[11px] text-muted-foreground">Pay with crypto (BTC · USDT · ETH · more)</div>
               <Button
                 className="mt-4 w-full"
                 variant={p.highlight ? "default" : "outline"}
                 disabled={isCurrent || checkoutMut.isPending}
                 onClick={() => checkoutMut.mutate(tier)}
               >
-                {isCurrent ? "Current plan" : checkoutMut.isPending ? "Redirecting..." : `Subscribe · GHS ${p.priceGhsMonthly}`}
+                {isCurrent ? "Current plan" : checkoutMut.isPending ? "Redirecting…" : `Pay $${p.priceMonthly} in crypto`}
               </Button>
             </div>
           );
