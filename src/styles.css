@@ -135,7 +135,8 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: dark; }
+  html { color-scheme: light dark; }
+  html.dark { color-scheme: dark; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
