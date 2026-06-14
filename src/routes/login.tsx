@@ -51,16 +51,6 @@ function LoginPage() {
     navigate({ to: search.redirect || "/dashboard" });
   };
 
-  const resendVerification = async () => {
-    setErr(null); setMsg(null);
-    const parsed = z.string().email().safeParse(email);
-    if (!parsed.success) { setErr("Enter your email first."); return; }
-    setResendBusy(true);
-    const { error } = await supabase.auth.resend({ type: "signup", email });
-    setResendBusy(false);
-    if (error) setErr(error.message);
-    else setMsg("Verification email sent. Check your inbox for the confirmation code/link.");
-  };
 
   const onGoogle = async () => {
     setBusy(true);
@@ -88,9 +78,6 @@ function LoginPage() {
           {msg && <p className="text-xs text-bull">{msg}</p>}
           <Button type="submit" className="w-full" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
         </form>
-        <Button type="button" variant="ghost" className="mt-2 w-full text-xs" disabled={resendBusy} onClick={resendVerification}>
-          {resendBusy ? "Sending…" : "Resend verification email"}
-        </Button>
         <div className="mt-4 flex justify-between text-xs text-muted-foreground">
           <Link to="/reset-password" className="hover:text-foreground">Forgot password?</Link>
           <Link to="/signup" className="hover:text-foreground">Create an account</Link>
