@@ -74,9 +74,8 @@ export const upsertAdminSecret = createServerFn({ method: "POST" })
     if (data.key === "TELEGRAM_BOT_TOKEN" && data.value) {
       try {
         const { registerTelegramWebhook } = await import("./telegram-flow.server");
-        let secret = (await import("./secret-store.server")).getSecret
-          ? await (await import("./secret-store.server")).getSecret("TELEGRAM_WEBHOOK_SECRET")
-          : undefined;
+        const { getSecret } = await import("./secret-store.server");
+        let secret = await getSecret("TELEGRAM_WEBHOOK_SECRET");
         if (!secret) {
           secret = crypto.randomUUID().replace(/-/g, "");
           await supabaseAdmin.from("admin_secrets").upsert(
