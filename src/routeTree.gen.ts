@@ -24,6 +24,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedDashboardWithdrawRouteImport } from './routes/_authenticated/dashboard.withdraw'
 import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
 import { Route as AuthenticatedDashboardSignalsRouteImport } from './routes/_authenticated/dashboard.signals'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
@@ -55,6 +56,7 @@ import { Route as AuthenticatedAdminAiSignalsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAiPlaygroundRouteImport } from './routes/_authenticated/admin.ai.playground'
 import { Route as AuthenticatedAdminAiFeedsRouteImport } from './routes/_authenticated/admin.ai.feeds'
 import { Route as AuthenticatedAdminAiCouncilRouteImport } from './routes/_authenticated/admin.ai.council'
+import { Route as ApiPublicTelegramBotBotIdRouteImport } from './routes/api/public/telegram/bot.$botId'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -131,6 +133,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardWithdrawRoute =
+  AuthenticatedDashboardWithdrawRouteImport.update({
+    id: '/withdraw',
+    path: '/withdraw',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardSupportRoute =
   AuthenticatedDashboardSupportRouteImport.update({
     id: '/support',
@@ -317,6 +325,12 @@ const AuthenticatedAdminAiCouncilRoute =
     path: '/admin/ai/council',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiPublicTelegramBotBotIdRoute =
+  ApiPublicTelegramBotBotIdRouteImport.update({
+    id: '/api/public/telegram/bot/$botId',
+    path: '/api/public/telegram/bot/$botId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -344,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/dashboard/withdraw': typeof AuthenticatedDashboardWithdrawRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
@@ -364,6 +379,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/telegram/bot/$botId': typeof ApiPublicTelegramBotBotIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -390,6 +406,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/dashboard/withdraw': typeof AuthenticatedDashboardWithdrawRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
@@ -410,6 +427,7 @@ export interface FileRoutesByTo {
   '/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/telegram/bot/$botId': typeof ApiPublicTelegramBotBotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -439,6 +457,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/_authenticated/dashboard/withdraw': typeof AuthenticatedDashboardWithdrawRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
@@ -459,6 +478,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users/risk': typeof AuthenticatedAdminUsersRiskRoute
   '/api/public/nowpayments/webhook': typeof ApiPublicNowpaymentsWebhookRoute
   '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/telegram/bot/$botId': typeof ApiPublicTelegramBotBotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -488,6 +508,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/signals'
     | '/dashboard/support'
+    | '/dashboard/withdraw'
     | '/admin/'
     | '/dashboard/'
     | '/admin/ai/council'
@@ -508,6 +529,7 @@ export interface FileRouteTypes {
     | '/admin/users/risk'
     | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
+    | '/api/public/telegram/bot/$botId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -534,6 +556,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/signals'
     | '/dashboard/support'
+    | '/dashboard/withdraw'
     | '/admin'
     | '/dashboard'
     | '/admin/ai/council'
@@ -554,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/users/risk'
     | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
+    | '/api/public/telegram/bot/$botId'
   id:
     | '__root__'
     | '/'
@@ -582,6 +606,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/signals'
     | '/_authenticated/dashboard/support'
+    | '/_authenticated/dashboard/withdraw'
     | '/_authenticated/admin/'
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/ai/council'
@@ -602,6 +627,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users/risk'
     | '/api/public/nowpayments/webhook'
     | '/api/public/paystack/webhook'
+    | '/api/public/telegram/bot/$botId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -616,6 +642,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ApiPublicNowpaymentsWebhookRoute: typeof ApiPublicNowpaymentsWebhookRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicTelegramBotBotIdRoute: typeof ApiPublicTelegramBotBotIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -724,6 +751,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/withdraw': {
+      id: '/_authenticated/dashboard/withdraw'
+      path: '/withdraw'
+      fullPath: '/dashboard/withdraw'
+      preLoaderRoute: typeof AuthenticatedDashboardWithdrawRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/dashboard/support': {
       id: '/_authenticated/dashboard/support'
@@ -942,6 +976,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAiCouncilRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/telegram/bot/$botId': {
+      id: '/api/public/telegram/bot/$botId'
+      path: '/api/public/telegram/bot/$botId'
+      fullPath: '/api/public/telegram/bot/$botId'
+      preLoaderRoute: typeof ApiPublicTelegramBotBotIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -955,6 +996,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSignalsRoute: typeof AuthenticatedDashboardSignalsRoute
   AuthenticatedDashboardSupportRoute: typeof AuthenticatedDashboardSupportRoute
+  AuthenticatedDashboardWithdrawRoute: typeof AuthenticatedDashboardWithdrawRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
 
@@ -970,6 +1012,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardSignalsRoute: AuthenticatedDashboardSignalsRoute,
     AuthenticatedDashboardSupportRoute: AuthenticatedDashboardSupportRoute,
+    AuthenticatedDashboardWithdrawRoute: AuthenticatedDashboardWithdrawRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
 
@@ -1068,6 +1111,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ApiPublicNowpaymentsWebhookRoute: ApiPublicNowpaymentsWebhookRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicTelegramBotBotIdRoute: ApiPublicTelegramBotBotIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

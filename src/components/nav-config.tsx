@@ -57,6 +57,7 @@ export const userNav: NavSection[] = [
   ]},
   { label: "Account", items: [
     { to: "/billing", label: "Billing", icon: <Receipt className="h-3.5 w-3.5" /> },
+    { to: "/dashboard/withdraw", label: "Withdraw", icon: <KeyRound className="h-3.5 w-3.5" /> },
     { to: "/dashboard/settings", label: "Security", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
     { to: "/messages", label: "Messages", icon: <MessageSquare className="h-3.5 w-3.5" /> },
     { to: "/dashboard/support", label: "Help Desk", icon: <BookOpen className="h-3.5 w-3.5" /> },
