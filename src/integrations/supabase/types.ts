@@ -68,6 +68,65 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assistant_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "assistant_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -373,6 +432,33 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_bot_sessions: {
+        Row: {
+          bot_id: string
+          id: string
+          selections: Json
+          step: string
+          telegram_chat_id: number
+          updated_at: string
+        }
+        Insert: {
+          bot_id: string
+          id?: string
+          selections?: Json
+          step?: string
+          telegram_chat_id: number
+          updated_at?: string
+        }
+        Update: {
+          bot_id?: string
+          id?: string
+          selections?: Json
+          step?: string
+          telegram_chat_id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_bot_subscribers: {
         Row: {
           bot_id: string
@@ -437,6 +523,7 @@ export type Database = {
           price_cents: number
           revshare_pct: number
           updated_at: string
+          webhook_secret: string | null
         }
         Insert: {
           bot_token: string
@@ -451,6 +538,7 @@ export type Database = {
           price_cents?: number
           revshare_pct?: number
           updated_at?: string
+          webhook_secret?: string | null
         }
         Update: {
           bot_token?: string
@@ -465,6 +553,7 @@ export type Database = {
           price_cents?: number
           revshare_pct?: number
           updated_at?: string
+          webhook_secret?: string | null
         }
         Relationships: []
       }
@@ -485,6 +574,45 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_requests: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          destination: Json
+          id: string
+          method: string
+          notes: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          currency?: string
+          destination?: Json
+          id?: string
+          method: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          destination?: Json
+          id?: string
+          method?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
