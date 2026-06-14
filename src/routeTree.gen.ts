@@ -22,6 +22,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
 import { Route as AuthenticatedDashboardSignalsRouteImport } from './routes/_authenticated/dashboard.signals'
@@ -119,6 +120,12 @@ const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
   path: '/billing',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -338,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
@@ -367,7 +375,6 @@ export interface FileRoutesByTo {
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/messages': typeof AuthenticatedMessagesRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -384,6 +391,7 @@ export interface FileRoutesByTo {
   '/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
@@ -432,6 +440,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/signals': typeof AuthenticatedDashboardSignalsRoute
   '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/ai/council': typeof AuthenticatedAdminAiCouncilRoute
   '/_authenticated/admin/ai/feeds': typeof AuthenticatedAdminAiFeedsRoute
   '/_authenticated/admin/ai/playground': typeof AuthenticatedAdminAiPlaygroundRoute
@@ -480,6 +489,7 @@ export interface FileRouteTypes {
     | '/dashboard/signals'
     | '/dashboard/support'
     | '/admin/'
+    | '/dashboard/'
     | '/admin/ai/council'
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
@@ -509,7 +519,6 @@ export interface FileRouteTypes {
     | '/support'
     | '/terms'
     | '/billing'
-    | '/dashboard'
     | '/messages'
     | '/profile'
     | '/admin/dashboard'
@@ -526,6 +535,7 @@ export interface FileRouteTypes {
     | '/dashboard/signals'
     | '/dashboard/support'
     | '/admin'
+    | '/dashboard'
     | '/admin/ai/council'
     | '/admin/ai/feeds'
     | '/admin/ai/playground'
@@ -573,6 +583,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/signals'
     | '/_authenticated/dashboard/support'
     | '/_authenticated/admin/'
+    | '/_authenticated/dashboard/'
     | '/_authenticated/admin/ai/council'
     | '/_authenticated/admin/ai/feeds'
     | '/_authenticated/admin/ai/playground'
@@ -699,6 +710,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/billing'
       preLoaderRoute: typeof AuthenticatedBillingRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -937,6 +955,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSignalsRoute: typeof AuthenticatedDashboardSignalsRoute
   AuthenticatedDashboardSupportRoute: typeof AuthenticatedDashboardSupportRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -951,6 +970,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardSignalsRoute: AuthenticatedDashboardSignalsRoute,
     AuthenticatedDashboardSupportRoute: AuthenticatedDashboardSupportRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
