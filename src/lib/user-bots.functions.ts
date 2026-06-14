@@ -106,6 +106,7 @@ export const upsertMyBot = createServerFn({ method: "POST" })
       }
     }
 
+    const webhookSecret = crypto.randomUUID().replace(/-/g, "");
     const row = {
       owner_id: userId,
       bot_token: data.bot_token,
@@ -116,6 +117,7 @@ export const upsertMyBot = createServerFn({ method: "POST" })
       currency: data.currency,
       revshare_pct: access.revsharePct,
       enabled: data.enabled,
+      webhook_secret: webhookSecret,
     };
     const { data: saved, error } = await supabaseAdmin
       .from("user_bots")
@@ -123,6 +125,18 @@ export const upsertMyBot = createServerFn({ method: "POST" })
       .select("id,bot_username,display_name,price_cents,period_days,currency,revshare_pct,enabled")
       .single();
     if (error) throw new Error(error.message);
+
+    // Auto-register Telegram webhook so the bot starts responding immediately.
+    try {
+      const { registerTelegramWebhook } = await import("./telegram-flow.server");
+      const baseUrl =
+        process.env.PUBLIC_APP_URL ??
+        process.env.VITE_PUBLIC_APP_URL ??
+        "https://tradisig.lovable.app";
+      await registerTelegramWebhook(data.bot_token, saved.id, baseUrl, webhookSecret);
+    } catch (e) {
+      console.error("setWebhook failed", e);
+    }
     return { ok: true, bot: saved, access };
   });
 

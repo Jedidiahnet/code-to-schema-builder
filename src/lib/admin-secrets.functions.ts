@@ -70,6 +70,28 @@ export const upsertAdminSecret = createServerFn({ method: "POST" })
 
     invalidateSecretCache(data.key);
 
+    // Auto-register Telegram admin bot webhook on token save.
+    if (data.key === "TELEGRAM_BOT_TOKEN" && data.value) {
+      try {
+        const { registerTelegramWebhook } = await import("./telegram-flow.server");
+        let secret = (await import("./secret-store.server")).getSecret
+          ? await (await import("./secret-store.server")).getSecret("TELEGRAM_WEBHOOK_SECRET")
+          : undefined;
+        if (!secret) {
+          secret = crypto.randomUUID().replace(/-/g, "");
+          await supabaseAdmin.from("admin_secrets").upsert(
+            { key: "TELEGRAM_WEBHOOK_SECRET", value: secret, description: "Auto-generated webhook secret", updated_by: context.userId, updated_at: new Date().toISOString() },
+            { onConflict: "key" },
+          );
+          invalidateSecretCache("TELEGRAM_WEBHOOK_SECRET");
+        }
+        const baseUrl = process.env.PUBLIC_APP_URL ?? "https://tradisig.lovable.app";
+        await registerTelegramWebhook(data.value, "admin", baseUrl, secret);
+      } catch (e) {
+        console.error("admin setWebhook failed", e);
+      }
+    }
+
     await supabaseAdmin.rpc("log_audit", {
       _actor_id: context.userId,
       _actor_email: (context.claims?.email as string | undefined) ?? "",
