@@ -78,7 +78,7 @@ function WithdrawPage() {
     <>
       <PageHeader title="Withdraw earnings" subtitle="Cash out your trading profits and bot subscription revenue." />
       <div className="grid gap-4 p-4 lg:grid-cols-3 lg:p-8">
-        <Section title="New request" className="lg:col-span-2">
+        <div className="lg:col-span-2"><Section title="New request">
           <form onSubmit={submit} className="space-y-4">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {METHODS.map((opt) => {
@@ -122,7 +122,7 @@ function WithdrawPage() {
 
             <Button type="submit" disabled={m.isPending}>{m.isPending ? "Submitting…" : "Request withdrawal"}</Button>
           </form>
-        </Section>
+        </Section></div>
 
         <Section title="History">
           {q.isLoading && <p className="text-xs text-muted-foreground">Loading…</p>}
